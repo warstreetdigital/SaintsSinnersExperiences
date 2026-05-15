@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saints n’ Sinners | Music Experience</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        :root {
+            --accent-gold: #ffcc33;
+            --accent-red: #ff3333;
+            --bg-dark: #070707;
+            --card-bg: rgba(20, 20, 20, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-muted: #888;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: #fff;
+            overflow-x: hidden;
+            padding-bottom: 120px; /* Space for player */
+        }
+
+        .music-atmosphere {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle at 50% -20%, rgba(255, 204, 51, 0.08) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .music-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header / Hero Section */
+        .playlist-hero {
+            position: relative;
+            padding: 40px 20px;
+            border-radius: 20px;
+            background: linear-gradient(180deg, rgba(30, 30, 30, 0.5) 0%, transparent 100%);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .playlist-artwork {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            background: url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Menu/Main.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .premium-play-button {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ffcc33 0%, #cc9900 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 204, 51, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.5);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 10;
+            animation: premiumFloat 4s infinite ease-in-out;
+            border: none;
+            color: #000;
+        }
+
+        .premium-play-button::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 50%;
+            background: rgba(255, 204, 51, 0.2);
+            filter: blur(15px);
+            z-index: -1;
+            animation: premiumPulse 2s infinite ease-in-out;
+        }
+
+        .premium-play-button:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 50px rgba(255, 204, 51, 0.6), inset 0 2px 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .premium-play-button:active {
+            transform: scale(0.9);
+        }
+
+        @keyframes premiumFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes premiumPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .playlist-info h1 {
+            font-size: 1.8rem;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #fff, var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .playlist-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Sections */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 15px;
+            padding: 0 5px;
+        }
+
+        .section-header h2 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-gold);
+            opacity: 0.8;
+        }
+
+        /* Track List */
+        .track-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .track-item {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .track-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .track-item.active {
+            border-color: var(--accent-gold);
+            background: rgba(255, 204, 51, 0.08);
+            box-shadow: 0 0 20px rgba(255, 204, 51, 0.1);
+            transform: scale(1.02) translateX(8px);
+        }
+
+        .track-number {
+            width: 30px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .track-details {
+            flex: 1;
+        }
+
+        .track-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2px;
+            transition: color 0.3s;
+        }
+
+        .track-item.active .track-name {
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px rgba(255, 204, 51, 0.4);
+        }
+
+        .track-artist {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .track-actions {
+            font-size: 1.2rem;
+            opacity: 0.5;
+        }
+
+        .active-indicator {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent-gold);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .track-item.active .active-indicator {
+            opacity: 1;
+        }
+
+        /* Extra Playlists */
+        .playlists-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .playlist-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            aspect-ratio: 1/1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .playlist-card:hover {
+            border-color: rgba(255, 204, 51, 0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 25px rgba(255, 204, 51, 0.15);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .playlist-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.9) 100%);
+            z-index: 2;
+        }
+
+        .card-glow {
+            position: absolute;
+            bottom: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140%;
+            height: 60%;
+            background: radial-gradient(ellipse at center, rgba(255, 204, 51, 0.2) 0%, transparent 70%);
+            z-index: 1;
+            opacity: 0.4;
+            transition: opacity 0.5s, transform 0.5s;
+            pointer-events: none;
+            animation: cardPulse 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes cardPulse {
+            0% { opacity: 0.3; transform: translateX(-50%) scale(1); }
+            100% { opacity: 0.6; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .playlist-card:hover .card-glow {
+            opacity: 0.8;
+            transform: translateX(-50%) translateY(-10px);
+            animation: none; /* stop pulse on hover for cleaner interaction */
+        }
+
+        .playlist-card .bg-img {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6;
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s;
+            z-index: 0;
+            filter: brightness(0.8) contrast(1.1);
+        }
+
+        .playlist-card:hover .bg-img {
+            transform: scale(1.15);
+            opacity: 0.8;
+            filter: brightness(1) contrast(1.2);
+        }
+
+        .playlist-card h3 {
+            position: relative;
+            z-index: 3;
+            font-size: 1rem;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .playlist-card .card-meta {
+            position: relative;
+            z-index: 3;
+            font-size: 0.65rem;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
+            margin-top: 5px;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+
+        /* Mini Player states */
+        @keyframes miniPlayerFloat {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -8px); }
+        }
+
+        .mini-player {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            width: calc(100% - 40px);
+            max-width: 560px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mini-player.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: all;
+            animation: miniPlayerFloat 6s infinite ease-in-out;
+        }
+
+        .player-artwork {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .player-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .player-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .player-artist {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .play-btn {
+            width: 44px;
+            height: 44px;
+            background: #fff;
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .play-btn:active {
+            transform: scale(0.9);
+        }
+
+        .progress-bar-container {
+            position: absolute;
+            top: -2px;
+            left: 20px;
+            right: 20px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent-gold);
+            width: 0%;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-gold);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .mini-player:hover .progress-bar::after {
+            opacity: 1;
+        }
+
+        /* Equalizer Animation */
+        .eq-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 15px;
+            margin-left: 10px;
+        }
+
+        .eq-bar {
+            width: 3px;
+            background: var(--accent-gold);
+            border-radius: 1px;
+            height: 2px;
+        }
+
+        .playing .eq-bar {
+            animation: eqScale 0.6s infinite ease-in-out alternate;
+        }
+
+        .eq-bar:nth-child(2) { animation-delay: 0.1s; }
+        .eq-bar:nth-child(3) { animation-delay: 0.2s; }
+        .eq-bar:nth-child(4) { animation-delay: 0.15s; }
+
+        @keyframes eqScale {
+            0% { height: 3px; }
+            100% { height: 15px; }
+        }
+
+        /* Back Button */
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 204, 51, 0.1);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Responsive Tweaks */
+        @media (max-width: 480px) {
+            .mini-player {
+                bottom: 10px;
+                width: calc(100% - 20px);
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="music-atmosphere"></div>
+    
+    <div class="music-container">
+        <nav class="back-nav">
+            <a href="index.html" class="back-btn">Return to Lounge</a>
+        </nav>
+
+        <section class="playlist-hero">
+            <div class="playlist-artwork">
+                <button class="premium-play-button" id="hero-play-btn">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" id="hero-play-icon">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" id="hero-pause-icon" style="display: none;">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="playlist-info">
+                <p>Saints n’ Sinners Presents</p>
+                <h1>After The Halo</h1>
+                <p style="font-size: 0.7rem; color: var(--accent-gold); margin-top: 5px;">Curated for the Midnight Experience</p>
+            </div>
+        </section>
+
+        <div class="section-header">
+            <h2>Tracklist</h2>
+            <span style="color: var(--text-muted); font-size: 0.7rem;">12 TRACKS</span>
+        </div>
+
+        <div class="track-list" id="track-list">
+            <!-- Tracks will be injected by JS -->
+        </div>
+
+        <div class="section-header">
+            <h2>Explore More</h2>
+        </div>
+
+        <div class="playlists-grid">
+            <div class="playlist-card">
+                <div class="bg-img" style="background-image: url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Events/Thursday.jpg')"></div>
+                <div class="card-glow"></div>
+                <h3>DJ Sessions</h3>
+                <div class="card-meta">Live from the Booth</div>
+            </div>
+            <div class="playlist-card">
+                <div class="bg-img" style="background-image: url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Events/Saturday.jpg')"></div>
+                <div class="card-glow"></div>
+                <h3>Zimbabwean Vibes</h3>
+                <div class="card-meta">Regional Heartbeat</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mini Player UI -->
+    <div class="mini-player" id="mini-player">
+        <div class="progress-bar-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="player-artwork" id="player-artwork"></div>
+        
+        <div class="player-info">
+            <div class="player-title" id="player-title">Select a track</div>
+            <div class="player-artist" id="player-artist">Saints n’ Sinners</div>
+        </div>
+
+        <div class="eq-container" id="eq-animation">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+        </div>
+
+        <div class="player-controls">
+            <div class="play-btn" id="play-pause">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" id="play-icon">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" id="pause-icon" style="display: none;">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script src="./music.js"></script>
+</body>
+</html>

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saints n' Sinners | Events Billboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Billboard Specific Overrides */
+        body {
+            overflow: hidden;
+            background: #000;
+        }
+
+        .billboard-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        /* Ambient Glow Foundation */
+        .billboard-container::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150vw;
+            height: 150vh;
+            background: radial-gradient(circle at center, rgba(179, 139, 45, 0.05) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 5;
+            animation: glowPulse 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes glowPulse {
+            from { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            to { opacity: 0.6; transform: translate(-48%, -52%) scale(1.1); }
+        }
+
+        /* Vignette Overlay */
+        .billboard-scene::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.8) 100%);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .billboard-scene {
+            position: absolute;
+            width: 100%;
+            height: 80vh;
+            top: 0;
+            display: grid;
+            place-items: center;
+        }
+
+        .event-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;
+            will-change: opacity;
+        }
+
+        /* Glowing Strip Light Border */
+        .event-slide::after {
+            content: '';
+            position: absolute;
+            top: 2%;
+            left: 2%;
+            right: 2%;
+            bottom: 2%;
+            border: 1px solid var(--event-glow, rgba(179, 139, 45, 0.3));
+            box-shadow: 0 0 30px var(--event-glow, rgba(179, 139, 45, 0.2)),
+                        inset 0 0 20px var(--event-glow, rgba(179, 139, 45, 0.1));
+            pointer-events: none;
+            z-index: 30;
+            opacity: 0.8;
+            animation: stripPulse 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes stripPulse {
+            0% { opacity: 0.4; box-shadow: 0 0 20px var(--event-glow, transparent); }
+            100% { opacity: 0.8; box-shadow: 0 0 50px var(--event-glow, rgba(179, 139, 45, 0.4)); }
+        }
+
+        .event-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: inherit;
+            background-size: cover;
+            background-position: center;
+            filter: blur(50px) brightness(0.3);
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        .event-slide.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        /* Cinematic Background Layers with Living Drift */
+        .slide-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: inherit;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.9) saturate(1.05);
+            transform: scale(1.03);
+            transition: opacity 1.5s ease;
+            opacity: 0.95;
+            will-change: transform, opacity;
+        }
+
+        .event-slide.active .slide-bg {
+            transform: scale(1) translate(0, 0);
+            opacity: 1;
+            filter: brightness(1) saturate(1.1);
+            transition: opacity 1.5s ease-out,
+                        filter 2s ease-out;
+            transition-delay: 0.2s;
+        }
+
+        /* Perspective Depth Systems */
+        .slide-depth-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 25;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%, rgba(255,255,255,0.02) 100%);
+            mix-blend-mode: overlay;
+            will-change: transform;
+            opacity: 0;
+            transition: opacity 2s ease-out;
+        }
+
+        .event-slide.active .slide-depth-overlay {
+            opacity: 1;
+            transition-delay: 0.8s;
+        }
+
+        .slide-haze-overlay {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            z-index: 22;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, var(--event-glow, rgba(255,255,255,0.05)) 0%, transparent 70%);
+            opacity: 0;
+            filter: blur(40px);
+            mix-blend-mode: lighten;
+            will-change: transform, opacity;
+            transition: opacity 2.5s ease-out;
+        }
+
+        .event-slide.active .slide-haze-overlay {
+            opacity: 0.15;
+            transition-delay: 0.5s;
+        }
+
+        /* Ambient Glow Pulse */
+        .billboard-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            overflow: hidden;
+            animation: globalGlowPulse 8s infinite alternate ease-in-out;
+            will-change: opacity, filter, box-shadow;
+        }
+
+        @keyframes globalGlowPulse {
+            0% { box-shadow: inset 0 0 50px rgba(0,0,0,1); }
+            100% { box-shadow: inset 0 0 100px var(--event-glow, transparent); }
+        }
+
+        /* Atmospheric HUD / CTA Area */
+        .billboard-hud {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20vh;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .countdown-container {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            text-align: right;
+            z-index: 1000;
+            opacity: 1; /* Always visible if content exists */
+            transform: none;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .countdown-billboard {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .event-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            color: var(--gold);
+            font-weight: 300;
+            opacity: 0.6;
+            text-shadow: 0 0 10px rgba(179, 139, 45, 0.3);
+        }
+
+        .timer-display {
+            font-family: var(--font-sans);
+            font-size: 1.4rem;
+            font-weight: 200;
+            color: #fff;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+            opacity: 0.9;
+        }
+
+        /* CTA Cinematic Style */
+        .cta-floating-bar {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: center;
+            pointer-events: auto;
+        }
+
+        .billboard-cta {
+            text-decoration: none;
+            padding: 14px 44px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(15px);
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5em;
+            font-size: 0.7rem;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 2px;
+            white-space: nowrap;
+            box-shadow: 0 0 15px var(--event-glow, transparent);
+        }
+
+        .billboard-cta:hover {
+            background: rgba(255,255,255,1);
+            color: #000;
+            letter-spacing: 0.7em;
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4), 0 0 30px var(--event-glow, rgba(255,255,255,0.5));
+        }
+
+        /* Atmospheric Layers & Cinematic Overlay */
+        .transition-flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            opacity: 0;
+            z-index: 200;
+            pointer-events: none;
+            transition: opacity 0.4s ease-out;
+        }
+
+        /* Floating Particles Foundation */
+        .particles-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 45;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .particle {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.5;
+            filter: blur(1px);
+            animation: particleFloat var(--p-duration) infinite linear;
+            will-change: transform, opacity;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translate(0, 0) scale(1); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translate(var(--p-tx), var(--p-ty)) scale(0); opacity: 0; }
+        }
+
+        .trigger-flash .transition-flash {
+            opacity: 0.15;
+            transition: opacity 0.1s ease-in;
+        }
+
+        .trigger-flash .light-sweep {
+            animation-duration: 2s;
+            opacity: 0.6;
+            filter: brightness(2);
+        }
+
+        .trigger-flash .billboard-cta {
+            transform: scale(0.95);
+            opacity: 0.5;
+            transition: all 0.3s ease-in;
+        }
+
+        .haze-layer {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--event-glow, rgba(179, 139, 45, 0.1)) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, var(--event-glow, transparent) 0%, transparent 60%);
+            z-index: 50;
+            pointer-events: none;
+            filter: blur(100px);
+            opacity: 0.4;
+            mix-blend-mode: soft-light;
+        }
+
+        /* Environmental Smoke/Fog Layer */
+        .smoke-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 55;
+            pointer-events: none;
+            opacity: 0.15;
+            mix-blend-mode: color-dodge;
+            background: url('https://www.transparenttextures.com/patterns/black-linen.png'); /* Subtle grain */
+            filter: blur(2px);
+        }
+
+        .smoke-layer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: smokeDrift 60s infinite linear;
+        }
+
+        @keyframes smokeDrift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-10%, -10%) rotate(360deg); }
+        }
+
+        /* Nightclub Light Sweeps */
+        .light-sweep-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 62;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0.2;
+            mix-blend-mode: screen;
+        }
+
+        .light-sweep {
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 40%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(25deg);
+            animation: lightSweepMove 8s infinite ease-in-out;
+        }
+
+        @keyframes lightSweepMove {
+            0% { transform: translateX(-150%) rotate(25deg); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateX(300%) rotate(25deg); opacity: 0; }
+        }
+
+        /* Foreground Reflection Layer */
+        .foreground-reflection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 90;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%, rgba(255,255,255,0.02) 100%);
+            mix-blend-mode: overlay;
+        }
+
+        @keyframes hazeMove {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            100% { transform: translate(-5%, -5%) rotate(10deg) scale(1.1); }
+        }
+
+        .spotlight, .spotlight-secondary {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+            z-index: 60;
+        }
+
+        .spotlight {
+            background: radial-gradient(
+                circle at var(--spot-x, 50%) var(--spot-y, 50%), 
+                rgba(255, 255, 255, var(--spot-opacity, 0.08)) 0%, 
+                transparent var(--spot-size, 40%)
+            );
+        }
+
+        .spotlight-secondary {
+            background: radial-gradient(
+                circle at var(--spot2-x, 30%) var(--spot2-y, 60%), 
+                rgba(255, 255, 255, var(--spot2-opacity, 0.05)) 0%, 
+                transparent var(--spot2-size, 30%)
+            );
+            z-index: 61;
+        }
+
+        /* Digital Billboard Effects */
+        .billboard-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            z-index: 70;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .billboard-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 16, 16, 0.1);
+            opacity: 0;
+            z-index: 80;
+            pointer-events: none;
+            animation: ledShimmer 10s infinite;
+        }
+
+        @keyframes ledShimmer {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.15; }
+            52% { opacity: 0.1; }
+            53% { opacity: 0.2; }
+            54% { opacity: 0.1; }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 204, 51, 0.1);
+            border-color: #ffcc33;
+            color: #ffcc33;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Navigation Dots */
+        .billboard-nav {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 4px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.6s;
+            cursor: pointer;
+        }
+
+        .nav-dot.active {
+            background: var(--gold);
+            height: 60px;
+        }
+
+        @media (max-width: 480px) {
+            .countdown-container { top: 20px; right: 20px; }
+            .timer-display { font-size: 1.1rem; letter-spacing: 0.05em; }
+            .event-label { font-size: 0.55rem; letter-spacing: 0.3em; }
+            .cta-floating-bar { padding: 0 40px; width: 100%; }
+            .billboard-cta { width: 100%; text-align: center; padding: 12px 0; font-size: 0.6rem; }
+            .back-btn { top: 20px; left: 20px; font-size: 0.6rem; }
+            .billboard-nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">
+        Return to Lounge
+    </a>
+
+    <div class="billboard-container">
+        <!-- Atmospheric Layers -->
+        <div class="particles-layer" id="particles-layer"></div>
+        <div class="smoke-layer"></div>
+        <div class="haze-layer" id="haze-layer"></div>
+        <div class="spotlight"></div>
+        <div class="spotlight-secondary"></div>
+        <div class="light-sweep-layer">
+            <div class="light-sweep" style="animation-delay: 0s;"></div>
+            <div class="light-sweep" style="animation-delay: 4s; width: 60%; opacity: 0.3;"></div>
+        </div>
+        <div class="flare-layer" id="flare-layer"></div>
+        <div class="foreground-reflection"></div>
+        <div class="transition-flash"></div>
+        
+        <div class="billboard-scene">
+            <!-- Wednesday -->
+            <div class="event-slide active" style="background-image: url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Events/Wednesday.jpg')" data-day="3">
+                <div class="slide-bg"></div>
+                <div class="slide-haze-overlay"></div>
+                <div class="slide-depth-overlay"></div>
+            </div>
+
+            <!-- Thursday -->
+            <div class="event-slide" style="background-image: url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Events/Thursday.jpg')" data-day="4">
+                <div class="slide-bg"></div>
+                <div class="slide-haze-overlay"></div>
+                <div class="slide-depth-overlay"></div>
+            </div>
+
+            <!-- Saturday -->
+            <div class="event-slide" style="background-image: url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Events/Saturday.jpg')" data-day="6">
+                <div class="slide-bg"></div>
+                <div class="slide-haze-overlay"></div>
+                <div class="slide-depth-overlay"></div>
+            </div>
+        </div>
+
+            <div class="countdown-container">
+                <div id="countdown-wrapper" class="countdown-billboard">
+                    <span id="countdown-label" class="event-label">WEDNESDAY IN</span>
+                    <span id="timer-string" class="timer-display">00D 00H 00M</span>
+                </div>
+            </div>
+
+            <div class="billboard-hud">
+                <div class="cta-floating-bar">
+                    <a href="https://www.instagram.com/saints_n_sinners_zw?igsh=MW9jYWIwOXR0YjVmZg==" target="_blank" class="billboard-cta">
+                        Join the Night
+                    </a>
+                </div>
+            </div>
+
+        <div class="billboard-nav" id="billboard-nav">
+            <div class="nav-dot active"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+        </div>
+    </div>
+
+    <script src="events.js"></script>
+</body>
+</html>

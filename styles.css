@@ -1,0 +1,490 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@200;300;400;500&display=swap');
+
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    --bg-dark: #000000;
+    --bg-matte: #050505;
+    --gold: #b38b2d;
+    --gold-bright: #f0c674;
+    --gold-glow: rgba(179, 139, 45, 0.1);
+    --white-warm: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.4);
+    --border-subtle: rgba(179, 139, 45, 0.08);
+    --font-serif: 'Cormorant Garamond', serif;
+    --font-sans: 'Inter', sans-serif;
+    --transition-cinema: 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--white-warm);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    cursor: default;
+}
+
+/* Loader Styles */
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-dark);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease 0.5s, visibility 1s ease 0.5s;
+}
+
+.loader.loaded {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-content {
+    text-align: center;
+    width: 200px;
+}
+
+.loader-logo {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 1.5rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInOut 2s ease-in-out infinite;
+}
+
+.loader-logo span {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.loader-bar {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    box-shadow: 0 0 15px var(--gold);
+    animation: loadBar 2s var(--transition-cinema) forwards;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+@keyframes loadBar {
+    to { width: 100%; }
+}
+
+/* Deep Atmosphere */
+.atmosphere {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background: radial-gradient(circle at 50% 50%, #080808 0%, #000 100%);
+    pointer-events: none;
+}
+
+/* Internal Glow without noise */
+.atmosphere::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, var(--gold-glow) 0%, transparent 60%);
+    opacity: 0.2;
+    animation: drift 30s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+.glow-effect {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--gold-glow) 0%, transparent 80%);
+    filter: blur(100px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    mix-blend-mode: color-dodge;
+}
+
+/* Grid Foundation & Alignment */
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    z-index: 10;
+}
+
+header {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    margin-bottom: 80px;
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+}
+
+header.active {
+    animation: heroReveal var(--transition-cinema) forwards;
+}
+
+@keyframes heroReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.logo {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    background: linear-gradient(to right, #fff 20%, var(--gold) 40%, var(--gold) 60%, #fff 80%);
+    background-size: 200% auto;
+    color: #fff;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 8s linear infinite;
+}
+
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+.logo span {
+    font-style: italic;
+    font-size: 0.7em;
+    vertical-align: middle;
+    margin: 0 6px;
+    color: var(--gold);
+    -webkit-text-fill-color: var(--gold);
+}
+
+.tagline {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6em;
+    color: var(--gold);
+    opacity: 0.8;
+    font-weight: 300;
+    word-spacing: 0.5em;
+}
+
+.rating {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    opacity: 0.8;
+}
+
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 0 auto 80px;
+    width: 100%;
+    max-width: 500px; /* Locked width for perfect centering */
+}
+
+.nav-card-wrapper {
+    position: relative;
+    perspective: 1200px;
+    opacity: 0;
+    transform: translateY(30px);
+    width: 100%;
+    aspect-ratio: 4 / 5.2;
+}
+
+.nav-card-wrapper.active {
+    animation: wrapperReveal var(--transition-cinema) forwards;
+}
+
+@keyframes wrapperReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-card-wrapper.active .nav-card {
+    animation: cardReveal var(--transition-cinema) forwards;
+}
+
+@keyframes cardReveal {
+    from {
+        opacity: 0;
+        transform: translateZ(-30px) rotateX(10deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateZ(0) rotateX(0);
+    }
+}
+
+@keyframes cinematicBreath {
+    0% { transform: scale(1.0) translate(0, 0); }
+    100% { transform: scale(1.1) translate(-1%, -0.5%); }
+}
+
+/* Base card state */
+.nav-card {
+    background: #050505;
+    border: 1px solid var(--border-subtle);
+    border-left: 2px solid transparent; 
+    border-radius: 4px;
+    padding: 28px 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: 
+        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.8s ease,
+        box-shadow 0.8s ease;
+    transform: translateZ(-30px);
+    transform-style: preserve-3d;
+    z-index: 2;
+}
+
+.nav-card-wrapper::before { display: none; } /* Explicitly remove back glow */
+
+/* Edge Lighting Strips (Architectural Style) */
+.nav-card::after {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 0;
+    width: 1px;
+    height: 70%;
+    z-index: 5;
+    opacity: 0.5;
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: blur(0.3px);
+}
+
+.card-menu::after { 
+    background: linear-gradient(to bottom, transparent, #ff6600, transparent);
+    box-shadow: 2px 0 12px rgba(255, 102, 0, 0.5);
+}
+.card-events::after { 
+    background: linear-gradient(to bottom, transparent, #e5c05b, transparent);
+    box-shadow: 2px 0 12px rgba(229, 192, 91, 0.5);
+}
+.card-playlist::after { 
+    background: linear-gradient(to bottom, transparent, #d946ef, transparent);
+    box-shadow: 2px 0 12px rgba(217, 70, 239, 0.5);
+}
+.card-management::after { 
+    background: linear-gradient(to bottom, transparent, #06b6d4, transparent);
+    box-shadow: 2px 0 12px rgba(6, 182, 212, 0.5);
+}
+
+@keyframes lightingShimmer {
+    0%, 100% { opacity: 0.4; filter: brightness(1) blur(0.3px); }
+    50% { opacity: 0.9; filter: brightness(1.8) blur(0.8px); }
+}
+
+.nav-card::after {
+    animation: lightingShimmer 5s infinite ease-in-out;
+}
+
+.nav-card:hover::after {
+    opacity: 1;
+    width: 2px;
+    height: 85%;
+    top: 7.5%;
+    filter: brightness(2.2) blur(0.8px);
+    box-shadow: 3px 0 20px currentColor; /* Dynamic glow based on background gradient if possible, but currentColor works if set */
+}
+
+/* Specific hover glows for edge strips */
+.card-menu:hover::after { box-shadow: 3px 0 25px rgba(255, 102, 0, 0.8); }
+.card-events:hover::after { box-shadow: 3px 0 25px rgba(229, 192, 91, 0.8); }
+.card-playlist:hover::after { box-shadow: 3px 0 25px rgba(217, 70, 239, 0.8); }
+.card-management:hover::after { box-shadow: 3px 0 25px rgba(6, 182, 212, 0.8); }
+
+/* Card images as atmospheric backgrounds */
+.nav-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.9) saturate(1) contrast(1.1);
+    transition: filter 1s ease;
+    z-index: 0;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.nav-card-wrapper.active .nav-card::before {
+    animation: cinematicBreath 15s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-card-wrapper:nth-child(1) .nav-card::before { animation-delay: 0s; }
+.nav-card-wrapper:nth-child(2) .nav-card::before { animation-delay: -3s; }
+.nav-card-wrapper:nth-child(3) .nav-card::before { animation-delay: -7s; }
+.nav-card-wrapper:nth-child(4) .nav-card::before { animation-delay: -11s; }
+
+.card-menu::before { background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/stuff-merch/menu.jpg'); }
+.card-events::before { background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/stuff-merch/events.jpg'); }
+.card-playlist::before { background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/stuff-merch/playlist.jpg'); }
+.card-management::before { background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/stuff-merch/management.jpg'); }
+
+.nav-card .card-index, .nav-card .card-title {
+    position: relative;
+    z-index: 10;
+    text-shadow: 0 4px 15px rgba(0,0,0,1);
+}
+
+.nav-card:hover, .nav-card:active {
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-8px) translateZ(30px) rotateX(0deg) scale(1.02);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.95);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.8s ease, box-shadow 0.8s ease;
+}
+
+.nav-card:hover::before {
+    filter: brightness(1) saturate(1.1) contrast(1.1);
+}
+
+.card-index {
+    font-family: var(--font-serif);
+    font-size: 0.7rem;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 8px;
+    letter-spacing: 0.3em;
+    font-style: italic;
+    transform: translateZ(15px);
+}
+
+.card-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white-warm);
+    text-transform: uppercase;
+    transform: translateZ(25px);
+}
+
+.nav-card:hover .card-index { transform: translateZ(25px); }
+.nav-card:hover .card-title { transform: translateZ(40px); }
+
+.card-title .arrow {
+    font-size: 1.1rem;
+    transition: transform 0.6s var(--transition-cinema);
+    opacity: 0.3;
+    font-weight: 200;
+}
+
+.nav-card:hover .arrow {
+    transform: translateX(8px);
+    opacity: 1;
+    color: var(--gold-bright);
+}
+
+.footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 100px 0 40px;
+    opacity: 0;
+}
+
+.footer .copyright {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: var(--white-warm);
+    opacity: 0.8;
+    margin-bottom: 12px;
+}
+
+.footer .powered-by {
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.footer.active {
+    animation: footerReveal 4s var(--transition-cinema) forwards;
+}
+
+@keyframes footerReveal {
+    to { opacity: 1; }
+}
+
+/* Mobile optimization */
+@media (max-width: 480px) {
+    .logo { font-size: 2.2rem; }
+    .nav-card { padding: 24px 16px; }
+    .card-title { font-size: 1.1rem; }
+    .container { padding: 40px 16px; }
+    .nav-grid { gap: 10px; }
+}
