@@ -921,6 +921,125 @@
             color: var(--accent-gold);
             font-weight: 700;
         }
+
+        /* Editorial & Hero Feature Cards */
+        .bar-hero-card {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid var(--glass-border-gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .bar-hero-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 35%;
+            filter: brightness(0.75);
+            transition: transform 0.5s ease;
+        }
+
+        .bar-hero-card:hover img {
+            transform: scale(1.03);
+        }
+
+        .bar-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(10, 10, 10, 0.1) 0%, rgba(10, 10, 10, 0.88) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 18px 20px;
+        }
+
+        .bar-hero-overlay .hero-sub {
+            font-size: 0.7rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .bar-hero-overlay .hero-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 2px;
+            line-height: 1.1;
+            font-weight: 500;
+        }
+
+        .editorial-banner-card {
+            position: relative;
+            width: 100%;
+            height: 170px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 28px 0 18px 0;
+            border: 1px solid rgba(255, 204, 51, 0.25);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .editorial-banner-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            filter: brightness(0.8);
+            transition: transform 0.4s ease;
+        }
+
+        .editorial-banner-card:hover img {
+            transform: scale(1.02);
+        }
+
+        .editorial-banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(10, 10, 10, 0.9) 0%, rgba(10, 10, 10, 0.2) 65%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px 18px;
+        }
+
+        .editorial-banner-overlay .editorial-tag {
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .editorial-banner-overlay .editorial-title {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            color: #fff;
+            letter-spacing: 1px;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        @media (min-width: 640px) {
+            .bar-hero-card {
+                height: 260px;
+            }
+            .bar-hero-overlay .hero-title {
+                font-size: 2.3rem;
+            }
+            .editorial-banner-card {
+                height: 210px;
+            }
+            .editorial-banner-overlay .editorial-title {
+                font-size: 1.6rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -934,11 +1053,14 @@
             <a href="index.html" class="back-link">Return to Lounge</a>
         </nav>
 
-        <header class="bar-header">
-            <p>Saints n’ Sinners Lounge & Pub</p>
-            <h1>Executive Bar Menu</h1>
-            <div class="bar-header-divider"></div>
-        </header>
+        <!-- Hero Banner with IMAGE 01 -->
+        <div class="bar-hero-card">
+            <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/d89ebf145d4c1d9eb3c18ffa095d04a2.jpg" alt="Saints n’ Sinners Executive Bar" />
+            <div class="bar-hero-overlay">
+                <p class="hero-sub">SAINTS N’ SINNERS</p>
+                <h1 class="hero-title">BAR MENU</h1>
+            </div>
+        </div>
 
         <!-- Live Search -->
         <div class="search-container">
@@ -1636,7 +1758,52 @@
                 });
                 cardsHtml += '</div>';
 
-                subSection.innerHTML = titleHtml + cardsHtml;
+                let bannerHtml = '';
+                if (!searchQuery) {
+                    if (subcatName === 'Signature Cocktails') {
+                        bannerHtml = `
+                            <div class="editorial-banner-card">
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/ed6cb7fe8ed69395a35a6f99e0f022b4.jpg" alt="Cocktails Feature" />
+                                <div class="editorial-banner-overlay">
+                                    <span class="editorial-tag">SELECTION</span>
+                                    <h3 class="editorial-title">COCKTAILS — Signature Pours</h3>
+                                </div>
+                            </div>
+                        `;
+                    } else if (subcatName === 'Classic Cocktails') {
+                        bannerHtml = `
+                            <div class="editorial-banner-card">
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/d865c3416ecdb51798199ff2a61dfe6a.jpg" alt="Signature Drinks" />
+                                <div class="editorial-banner-overlay">
+                                    <span class="editorial-tag">CRAFT MIXOLOGY</span>
+                                    <h3 class="editorial-title">Handcrafted Pours & Classics</h3>
+                                </div>
+                            </div>
+                        `;
+                    } else if (subcatName === 'Whiskey') {
+                        bannerHtml = `
+                            <div class="editorial-banner-card">
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/28c86921ced7dffd814b8e99c725488b.jpg" alt="Whiskey & Spirits" />
+                                <div class="editorial-banner-overlay">
+                                    <span class="editorial-tag">ATMOSPHERE</span>
+                                    <h3 class="editorial-title">Whiskey, Spirits & Fine Liquors</h3>
+                                </div>
+                            </div>
+                        `;
+                    } else if (subcatName === 'Aphrodisiacs' || subcatName === 'Beers') {
+                        bannerHtml = `
+                            <div class="editorial-banner-card">
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/05b40712578eccd594e796ea0096306f.jpg" alt="Bar Preparation" />
+                                <div class="editorial-banner-overlay">
+                                    <span class="editorial-tag">FROM THE BAR</span>
+                                    <h3 class="editorial-title">Artisanal Preparation</h3>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                subSection.innerHTML = bannerHtml + titleHtml + cardsHtml;
                 renderTarget.appendChild(subSection);
             });
         }
