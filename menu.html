@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saints n’ Sinners | Menu Selection</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        :root {
+            --accent-gold: #ffcc33;
+            --bg-dark: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .menu-atmosphere {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 204, 51, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 204, 51, 0.04) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .gateway-container {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Navigation */
+        .back-nav {
+            margin-bottom: 35px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-link:hover {
+            background: rgba(255, 204, 51, 0.1);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Header */
+        .gateway-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .gateway-header p {
+            color: var(--accent-gold);
+            font-size: 0.7rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            opacity: 0.85;
+            margin-bottom: 10px;
+        }
+
+        .gateway-header h1 {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #ffffff 0%, #aaaaaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        /* Gateway Cards Grid */
+        .gateway-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+        }
+
+        .gateway-card {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #111;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease, box-shadow 0.5s ease;
+            text-decoration: none;
+            color: #fff;
+            display: block;
+        }
+
+        .gateway-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: rgba(255, 204, 51, 0.4);
+            box-shadow: 0 35px 70px rgba(255, 204, 51, 0.15);
+        }
+
+        /* Card Background Image & Motion */
+        .card-bg {
+            position: absolute;
+            inset: -5%;
+            width: 110%;
+            height: 110%;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.7) contrast(1.1);
+            transition: transform 12s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+            animation: slowZoom 20s infinite alternate ease-in-out;
+        }
+
+        .gateway-card:hover .card-bg {
+            filter: brightness(0.85) contrast(1.15);
+            transform: scale(1.08);
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1.0); }
+            100% { transform: scale(1.12); }
+        }
+
+        /* Overlays */
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
+            z-index: 1;
+        }
+
+        .light-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 100%, rgba(255, 204, 51, 0.12) 0%, transparent 70%);
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .gateway-card:hover .light-glow {
+            opacity: 1;
+        }
+
+        /* Content inside card */
+        .card-content {
+            position: absolute;
+            inset: 0;
+            padding: 30px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .card-badge {
+            font-size: 0.65rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+            display: inline-block;
+            text-shadow: 0 0 10px rgba(255, 204, 51, 0.3);
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+
+        .card-desc {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 300;
+            margin-bottom: 15px;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            font-weight: 500;
+            transition: transform 0.3s ease;
+        }
+
+        .gateway-card:hover .card-action {
+            transform: translateX(6px);
+        }
+
+        @media (max-width: 480px) {
+            .gateway-card {
+                height: 230px;
+            }
+            .card-title {
+                font-size: 1.5rem;
+            }
+            .card-content {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-atmosphere"></div>
+    <canvas id="particles-canvas" class="particles"></canvas>
+
+    <div class="gateway-container">
+        <nav class="back-nav">
+            <a href="index.html" class="back-link">Return to Lounge</a>
+        </nav>
+
+        <header class="gateway-header">
+            <p>Saints n’ Sinners Elite</p>
+            <h1>Menu Selection</h1>
+        </header>
+
+        <div class="gateway-stack">
+            <!-- 1. RESTAURANT MENU (External URL) -->
+            <a href="https://saints-sinnersdigitalmenu.pages.dev/" class="gateway-card">
+                <div class="card-bg" style="background-image: url('https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/stuff-merch/menu.jpg');"></div>
+                <div class="card-overlay"></div>
+                <div class="light-glow"></div>
+                <div class="card-content">
+                    <span class="card-badge">Dining & Culinary</span>
+                    <h2 class="card-title">Restaurant Menu</h2>
+                    <p class="card-desc">Gourmet Starters, Executive Entrées & Dessert Selections</p>
+                    <span class="card-action">View Restaurant Menu →</span>
+                </div>
+            </a>
+
+            <!-- 2. BAR MENU (Local Module) -->
+            <a href="bar-menu.html" class="gateway-card">
+                <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1200&q=80');"></div>
+                <div class="card-overlay"></div>
+                <div class="light-glow"></div>
+                <div class="card-content">
+                    <span class="card-badge">Spirits & Mixology</span>
+                    <h2 class="card-title">Bar Menu</h2>
+                    <p class="card-desc">Signature Cocktails, Reserve Whiskeys, Fine Wines & Beers</p>
+                    <span class="card-action">View Bar Menu →</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Ambient Particle Canvas for Menu Gateway
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            const particles = [];
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.init();
+                }
+                init() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 1.5 + 0.5;
+                    this.speedX = Math.random() * 0.2 - 0.1;
+                    this.speedY = Math.random() * 0.3 - 0.15;
+                    this.opacity = Math.random() * 0.4 + 0.1;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                        this.init();
+                    }
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(255, 204, 51, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 35; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+    </script>
+</body>
+</html>

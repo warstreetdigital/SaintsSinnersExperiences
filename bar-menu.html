@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saints n’ Sinners | Executive Bar Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        :root {
+            --accent-gold: #ffcc33;
+            --accent-gold-bright: #ffe066;
+            --accent-gold-dark: #cca329;
+            --bg-dark: #050505;
+            --card-bg: rgba(18, 18, 18, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-gold: rgba(255, 204, 51, 0.25);
+            --font-serif: 'Cormorant Garamond', Georgia, serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(45, 35, 10, 0.45) 0%, transparent 65%),
+                radial-gradient(circle at 85% 90%, rgba(25, 20, 5, 0.35) 0%, transparent 50%);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 110px;
+            font-family: var(--font-sans);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .bar-atmosphere {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 40%, transparent 40%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.25;
+        }
+
+        .bar-container {
+            width: 100%;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 24px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Navigation Header */
+        .nav-bar-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-link:hover {
+            background: rgba(255, 204, 51, 0.12);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+        }
+
+        /* Header */
+        .bar-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .bar-header p {
+            color: var(--accent-gold);
+            font-size: 0.68rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .bar-header h1 {
+            font-family: var(--font-serif);
+            font-size: 2.6rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #ffffff 30%, #d1d1d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.15;
+        }
+
+        .bar-header-divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            margin: 12px auto 0 auto;
+            opacity: 0.6;
+        }
+
+        /* Search Control */
+        .search-container {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 13px 20px 13px 46px;
+            background: rgba(20, 20, 20, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            color: #fff;
+            font-size: 0.88rem;
+            font-family: var(--font-sans);
+            outline: none;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 300;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-gold);
+            background: rgba(28, 28, 28, 0.85);
+            box-shadow: 0 0 18px rgba(255, 204, 51, 0.18), inset 0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-gold);
+            opacity: 0.8;
+            font-size: 0.95rem;
+            pointer-events: none;
+        }
+
+        /* Category Filter Tabs Rail */
+        .category-rail-wrapper {
+            position: relative;
+            margin-bottom: 28px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 4px 6px 12px 6px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            white-space: nowrap;
+            padding: 9px 18px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.72rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            border-color: rgba(255, 204, 51, 0.4);
+            background: rgba(255, 204, 51, 0.06);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, rgba(255, 204, 51, 0.22) 0%, rgba(255, 204, 51, 0.08) 100%);
+            border-color: var(--accent-gold);
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 204, 51, 0.2), inset 0 0 10px rgba(255, 204, 51, 0.1);
+        }
+
+        /* Subcategory Section Header */
+        .subcategory-title {
+            font-family: var(--font-serif);
+            font-size: 1.45rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            margin: 32px 0 16px 0;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 204, 51, 0.2);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .subcategory-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .item-count-badge {
+            font-size: 0.62rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: var(--font-sans);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        /* Drink Grid Layout */
+        .drink-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .drink-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px 18px;
+            position: relative;
+            backdrop-filter: blur(12px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .drink-card:hover {
+            border-color: rgba(255, 204, 51, 0.38);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.65);
+            background: rgba(25, 25, 25, 0.88);
+        }
+
+        .drink-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .drink-name {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            line-height: 1.25;
+            flex: 1;
+        }
+
+        .drink-price-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 3px;
+            flex-shrink: 0;
+        }
+
+        .price-badge {
+            font-family: var(--font-serif);
+            font-size: 1.12rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            white-space: nowrap;
+            background: rgba(255, 204, 51, 0.1);
+            padding: 3px 11px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 204, 51, 0.28);
+        }
+
+        .price-sub {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .drink-desc {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.62);
+            line-height: 1.45;
+            font-weight: 300;
+            margin-top: 8px;
+            font-family: var(--font-sans);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .bar-container {
+                padding: 16px 12px;
+            }
+            .drink-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .bar-header {
+                margin-bottom: 20px;
+            }
+            .bar-header h1 {
+                font-size: 2.1rem;
+            }
+            .drink-card {
+                padding: 14px 16px;
+            }
+            .drink-name {
+                font-size: 1.18rem;
+            }
+            .nav-bar-group {
+                margin-bottom: 18px;
+            }
+        }
+
+        /* Card Actions & Buttons */
+        .drink-actions {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .add-btn-single {
+            width: 100%;
+            padding: 8px 14px;
+            background: rgba(255, 204, 51, 0.08);
+            border: 1px solid rgba(255, 204, 51, 0.28);
+            border-radius: 20px;
+            color: var(--accent-gold);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .add-btn-single:hover {
+            background: rgba(255, 204, 51, 0.22);
+            border-color: var(--accent-gold);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(255, 204, 51, 0.15);
+        }
+
+        .add-btn-single:active {
+            transform: scale(0.98);
+        }
+
+        /* Dual Option Buttons */
+        .dual-option-row {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .add-option-btn {
+            flex: 1;
+            padding: 7px 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 204, 51, 0.25);
+            border-radius: 18px;
+            color: var(--accent-gold);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .add-option-btn:hover {
+            background: rgba(255, 204, 51, 0.18);
+            border-color: var(--accent-gold);
+            color: #fff;
+        }
+
+        /* Quantity Adjuster on Cards */
+        .card-qty-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 204, 51, 0.12);
+            border: 1px solid var(--accent-gold);
+            border-radius: 20px;
+            padding: 3px 6px;
+            width: 100%;
+        }
+
+        .card-qty-control.compact {
+            flex: 1;
+        }
+
+        .qty-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 204, 51, 0.25);
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .qty-btn:hover {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        .qty-count {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.5px;
+            padding: 0 4px;
+        }
+
+        /* Floating Cart Bar */
+        .cart-floating-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 520px;
+            background: rgba(15, 15, 15, 0.94);
+            border: 1px solid var(--accent-gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 22px rgba(255, 204, 51, 0.2);
+            backdrop-filter: blur(16px);
+            border-radius: 50px;
+            padding: 8px 10px 8px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 99;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cart-floating-bar.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, 30px);
+        }
+
+        .cart-bar-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cart-icon-wrapper {
+            position: relative;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-bar-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--accent-gold);
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 800;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
+        .cart-bar-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-bar-title {
+            font-size: 0.68rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cart-bar-subtotal {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            line-height: 1;
+        }
+
+        .cart-bar-checkout-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+            border: none;
+            border-radius: 30px;
+            color: #000;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(255, 204, 51, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .cart-bar-checkout-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 204, 51, 0.45);
+        }
+
+        /* Modal Drawer */
+        .cart-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .cart-modal-backdrop.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cart-modal {
+            width: 100%;
+            max-width: 550px;
+            background: #0d0d0d;
+            border: 1px solid var(--glass-border-gold);
+            border-bottom: none;
+            border-radius: 24px 24px 0 0;
+            padding: 22px 20px 28px 20px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.9);
+            transform: translateY(0);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cart-modal-backdrop.hidden .cart-modal {
+            transform: translateY(100%);
+        }
+
+        .cart-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .cart-modal-title h2 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+        }
+
+        .cart-modal-title p {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .cart-close-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .cart-close-btn:hover {
+            background: rgba(255, 204, 51, 0.2);
+            color: var(--accent-gold);
+        }
+
+        .cart-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 14px;
+            border-radius: 12px;
+            gap: 12px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cart-item-title {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cart-item-pricing {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+        }
+
+        .cart-item-qty-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .cart-item-total {
+            font-family: var(--font-serif);
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            min-width: 55px;
+            text-align: right;
+        }
+
+        .cart-item-remove {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .cart-item-remove:hover {
+            color: #ff5555;
+        }
+
+        .empty-cart-msg {
+            text-align: center;
+            padding: 40px 10px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .cart-modal-footer {
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .cart-subtotal-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .cart-subtotal-price {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .whatsapp-checkout-btn {
+            width: 100%;
+            padding: 14px;
+            background: #25D366;
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+            transition: all 0.25s ease;
+        }
+
+        .whatsapp-checkout-btn:hover {
+            background: #22c35e;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.45);
+            transform: translateY(-1px);
+        }
+
+        /* Table Number Input Styling */
+        .cart-table-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 6px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .cart-table-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-table-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 204, 51, 0.3);
+            border-radius: 14px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .cart-table-input::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .cart-table-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 12px rgba(255, 204, 51, 0.25);
+        }
+
+        .cart-table-input.input-error {
+            border-color: #ff5555;
+            box-shadow: 0 0 12px rgba(255, 85, 85, 0.35);
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-4px); }
+            40%, 80% { transform: translateX(4px); }
+        }
+
+        .table-number-error {
+            color: #ff6b6b;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .table-number-error.hidden {
+            display: none;
+        }
+
+        /* Toast */
+        .toast-notification {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid var(--accent-gold);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 204, 51, 0.2);
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast-notification.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-notification.hidden {
+            display: none;
+        }
+
+        .toast-icon {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="bar-atmosphere"></div>
+    <canvas id="particles-canvas" class="particles"></canvas>
+
+    <div class="bar-container">
+        <!-- Navigation Buttons -->
+        <nav class="nav-bar-group">
+            <a href="menu.html" class="back-link">← Menu Gateway</a>
+            <a href="index.html" class="back-link">Return to Lounge</a>
+        </nav>
+
+        <header class="bar-header">
+            <p>Saints n’ Sinners Lounge & Pub</p>
+            <h1>Executive Bar Menu</h1>
+            <div class="bar-header-divider"></div>
+        </header>
+
+        <!-- Live Search -->
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input" placeholder="Search drinks (e.g., Mojito, Hennessy, Merlot)...">
+        </div>
+
+        <!-- Filter Category Tabs Rail -->
+        <div class="category-rail-wrapper">
+            <div class="category-tabs" id="category-tabs">
+                <button class="tab-btn active" data-category="all">All Drinks</button>
+                <button class="tab-btn" data-category="cocktails">Cocktails</button>
+                <button class="tab-btn" data-category="mocktails">Mocktails</button>
+                <button class="tab-btn" data-category="shooters">Shooters</button>
+                <button class="tab-btn" data-category="spirits">Whiskey & Spirits</button>
+                <button class="tab-btn" data-category="beers">Beers & Coolers</button>
+                <button class="tab-btn" data-category="wines">Wines & Champagne</button>
+                <button class="tab-btn" data-category="beverages">Soft Drinks & Juices</button>
+            </div>
+        </div>
+
+        <!-- Menu Render Target Container -->
+        <div id="menu-render-target"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="toast-notification hidden">
+        <span class="toast-icon">✓</span>
+        <span id="toast-message">Added to order</span>
+    </div>
+
+    <!-- Floating Sticky Cart Bar -->
+    <div id="cart-floating-bar" class="cart-floating-bar hidden">
+        <div class="cart-bar-info">
+            <div class="cart-icon-wrapper">
+                <span>🍸</span>
+                <span id="cart-bar-badge" class="cart-bar-badge">0</span>
+            </div>
+            <div class="cart-bar-text">
+                <span id="cart-bar-items-text" class="cart-bar-title">0 Items</span>
+                <span id="cart-bar-subtotal" class="cart-bar-subtotal">$0.00</span>
+            </div>
+        </div>
+        <button class="cart-bar-checkout-btn" onclick="openCartModal()">
+            <span>View Order</span>
+            <span>→</span>
+        </button>
+    </div>
+
+    <!-- Cart / Checkout Modal Drawer -->
+    <div id="cart-modal-backdrop" class="cart-modal-backdrop hidden" onclick="closeCartModalOnBackdrop(event)">
+        <div class="cart-modal">
+            <div class="cart-modal-header">
+                <div class="cart-modal-title">
+                    <h2>YOUR ORDER</h2>
+                    <p>Saints n’ Sinners Executive Bar</p>
+                </div>
+                <button class="cart-close-btn" onclick="closeCartModal()">✕</button>
+            </div>
+
+            <div class="cart-modal-body" id="cart-modal-items">
+                <!-- Items populated dynamically -->
+            </div>
+
+            <div class="cart-modal-footer">
+                <div class="cart-table-group">
+                    <label for="table-number-input" class="cart-table-label">
+                        <span>Table Number</span>
+                    </label>
+                    <input type="text" id="table-number-input" class="cart-table-input" placeholder="e.g. Table 12" inputmode="numeric" autocomplete="off" />
+                    <div id="table-number-error" class="table-number-error hidden">⚠️ Please enter your table number.</div>
+                </div>
+
+                <div class="cart-subtotal-row">
+                    <span>SUBTOTAL</span>
+                    <span id="cart-modal-subtotal" class="cart-subtotal-price">$0.00</span>
+                </div>
+                <button class="whatsapp-checkout-btn" onclick="submitOrderToWhatsApp()">
+                    <svg class="wa-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M12.031 0C5.396 0 .02 5.376.02 12.012c0 2.119.552 4.185 1.602 6.007L0 24l6.155-1.614a11.97 11.97 0 0 0 5.876 1.542h.005c6.635 0 12.011-5.377 12.011-12.016A11.94 11.94 0 0 0 12.031 0zm0 22.013h-.004a9.98 9.98 0 0 1-5.091-1.396l-.366-.217-3.784.992 1.01-3.687-.238-.379a9.97 9.97 0 0 1-1.53-5.315c0-5.518 4.49-10.008 10.008-10.008 2.673 0 5.185 1.04 7.076 2.932a9.93 9.93 0 0 1 2.926 7.076c0 5.519-4.49 10.008-10.008 10.008zm5.485-7.494c-.301-.151-1.782-.88-2.058-.98-.276-.101-.477-.151-.678.151-.201.301-.778.98-.954 1.18-.176.201-.351.226-.652.076-.301-.151-1.272-.469-2.424-1.498-.896-.8-1.501-1.788-1.677-2.089-.176-.301-.019-.464.131-.613.136-.135.301-.351.451-.527.151-.176.201-.301.301-.502.101-.201.05-.376-.025-.527-.075-.151-.678-1.631-.929-2.235-.244-.588-.493-.509-.678-.518-.176-.009-.376-.009-.577-.009-.201 0-.527.075-.803.376s-1.053 1.029-1.053 2.509 1.078 2.906 1.229 3.107c.151.201 2.122 3.24 5.141 4.544.718.31 1.279.496 1.716.635.722.23 1.38.197 1.9.12.58-.087 1.782-.728 2.033-1.431.251-.703.251-1.305.176-1.43-.075-.126-.276-.201-.577-.352z"/>
+                    </svg>
+                    <span>ORDER VIA WHATSAPP</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MASTER DRINKS DATASET (100% Extracted from Official PDF)
+        const drinksData = [
+            // --- COCKTAILS ---
+            { name: "Saints Margarita", price: "$5.00", category: "cocktails", subcategory: "Signature Cocktails", desc: "A slight twist of the original. Too many of these and you will be seeing dos." },
+            { name: "I've Gin Expecting You", price: "$9.00", category: "cocktails", subcategory: "Signature Cocktails", desc: "Okay, are you ready to have that conversation?" },
+            
+            { name: "Blue Hawaiian", price: "$7.00", category: "cocktails", subcategory: "Specialities", desc: "Hawaii is here!" },
+            { name: "Diamonds & Crystals", price: "$8.00", category: "cocktails", subcategory: "Specialities", desc: "Gordons gin, elderflower syrup, monin cucumber, fresh mint, fresh lime, fresh cucumber topped up with soda water." },
+
+            { name: "Choc Chip Cookie", price: "$7.00", category: "cocktails", subcategory: "Dessert Cocktails", desc: "Choc chips blended with ice cream and amarula, menthe, white cacao." },
+            { name: "Perfectly Pink", price: "$9.00", category: "cocktails", subcategory: "Dessert Cocktails", desc: "Strawberry puree, amaretto, southern comfort, strawberry liqueur, chambord, ice cream. Blend frozen." },
+            { name: "Lady Posh", price: "$6.00", category: "cocktails", subcategory: "Dessert Cocktails", desc: "Lovoka caramel, menthe, white cacao, rose syrup and cream." },
+
+            { name: "Mojito", price: "$7.00", category: "cocktails", subcategory: "Classics", desc: "Double rum infused with mint, lime topped with soda water." },
+            { name: "Strawberry Daquiri", price: "$7.00", category: "cocktails", subcategory: "Classics", desc: "Rum, strawberry liqueur, strawberry puree, grenadine and sour mix." },
+            { name: "Long Island Ice Tea", price: "$8.00", category: "cocktails", subcategory: "Classics", desc: "Five spirits, sour mix, topped with coke." },
+            { name: "Zombie", price: "$8.00", category: "cocktails", subcategory: "Classics", desc: "Watch out now! It just might be the walking dead all over again." },
+            { name: "Pina Colada", price: "$6.00", category: "cocktails", subcategory: "Classics", desc: "Bacardi, malibu, spiced gold, cream, passionfruit cordial, fresh pineapple and pineapple juice." },
+            { name: "Tequila Sunrise", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "A double shot of Jose Cuervo Gold, orange juice and grenadine." },
+            { name: "Sex on the Beach", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "Vodka, peach schnapps, cassis, orange juice, cranberry juice." },
+            { name: "Cosmopolitan", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "Vodka, triple sec, lime cordial and cranberry juice." },
+            { name: "Old Fashioned", price: "$6.00", category: "cocktails", subcategory: "Classics", desc: "The old fashioned is a cocktail made of muddling sugar with bitters, adding whiskey." },
+            { name: "Margarita", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "Tequila gold, triple sec, lime cordial and lemon juice." },
+            { name: "Whiskey Sour", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "Double Jack Daniels, egg, lemonade." },
+            { name: "Mai Tai", price: "$7.00", category: "cocktails", subcategory: "Classics", desc: "Bacardi, spiced rum, dark rum, orange juice, pineapple juice, grenadine and float amaretto." },
+
+            // --- MOCKTAILS ---
+            { name: "Strawberry Lemonade", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Strawberry puree, sour mix and topped up with soda water." },
+            { name: "Blueberry Lemonade", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Blueberry puree, sour mix and topped up with soda water." },
+            { name: "Virgin Daquiri", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Comes in different flavours: peach, strawberry and watermelon." },
+            { name: "Peach Lemonade", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Peach puree, sour mix. Topped up with soda water." },
+            { name: "Virgin Mojito", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Fresh lemon, wild mint syrup, mint leaves. Topped up with soda water." },
+
+            // --- SHOOTERS ---
+            { name: "Liquid Cocaine", price: "$5.00", category: "shooters", subcategory: "Party Shots", desc: "Vodka, blue curacao and lime. Shaken." },
+            { name: "Moonshine", price: "$5.00", category: "shooters", subcategory: "Party Shots", desc: "Vodka, strawberry liqueur and lime. Shaken." },
+            { name: "Saints&Sinners Lolly", price: "$5.00", category: "shooters", subcategory: "Party Shots", desc: "Amarula, blue curacao, banana liqueur, grenadine and cream. Shaken." },
+
+            { name: "Chocolate Cake", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Frangelico and Absolut vanilla. Served with a lemon slice and brown sugar." },
+            { name: "Jelly Baby", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Grenadine, banana liqueur, blue curacao, amarula and malibu." },
+            { name: "G-Spot", price: "$5.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Kahlua, Jack Daniels, Southern Comfort and a drop of amarula." },
+            { name: "Shortcake", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Strawberry liqueur, amarula and fresh cream." },
+            { name: "Blowjob", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Kahlua, amarula and fresh cream." },
+            { name: "Springbokkie", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Creme de menthe and amarula." },
+            { name: "Teardrop", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Frangelico, amarula and nachtmuzik." },
+            { name: "Shit in the Forest", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Creme de menthe, amarula and nachtmuzik." },
+            { name: "Snowball", price: "$3.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Lupini Inferno, amarula and Bacardi." },
+            { name: "Slippery Nipple", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Zappa white, amarula and a cherry inside glass." },
+            { name: "Lollipop", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Creme de banana, blue curacao, amarula and 6 drops of grenadine." },
+            { name: "Rainbow Dragon", price: "$3.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Jagermeister, creme de menthe, gold tequila and nitro cinnamon." },
+            { name: "Blue Balls", price: "$3.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Blue curacao, peach schnapps and Olmeca black." },
+            { name: "Absintheminded", price: "$3.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Jagermeister, Olmeca black, absinthe and Stroh rum." },
+
+            { name: "Hot Mamma", price: "$3.00", category: "shooters", subcategory: "Pyro", desc: "Captain Morgan and cinnamon liqueur with 6 drops of tabasco." },
+            { name: "Flaming Lamborghini", price: "$8.00", category: "shooters", subcategory: "Pyro", desc: "We about to cook your brains, not for the faint hearted!" },
+            { name: "Saints 'n Sinners", price: "$5.00", category: "shooters", subcategory: "Pyro", desc: "Olmeca Black, Stroh rum. Served with an orange slice and brown sugar. Don't burn your lips!" },
+            { name: "Spicy Eve", price: "$3.00", category: "shooters", subcategory: "Pyro", desc: "Nitro cinnamon, amarula and absinthe." },
+
+            // --- WHISKEY & SPIRITS ---
+            { name: "Bells", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Don Julio", price: "$3.00", shotPrice: "$3.00", btlPrice: "$80.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Glenfiddich 12yr", price: "$3.00", shotPrice: "$3.00", btlPrice: "$70.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Glenfiddich 15yr", price: "$5.00", shotPrice: "$5.00", btlPrice: "$100.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "JW Gold Label", price: "$4.00", shotPrice: "$4.00", btlPrice: "$100.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "JW Black Label", price: "$3.00", shotPrice: "$3.00", btlPrice: "$50.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "JW Double Black", price: "$4.00", shotPrice: "$4.00", btlPrice: "$70.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "JW Red Label", price: "$2.00", shotPrice: "$2.00", btlPrice: "$35.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "JW Blue Label", price: "$320.00", btlPrice: "$320.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Jameson", price: "$2.00", shotPrice: "$2.00", btlPrice: "$45.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Jameson Select", price: "$3.00", shotPrice: "$3.00", btlPrice: "$80.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "J & B", price: "$1.50", shotPrice: "$1.50", btlPrice: "$33.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Jack Daniels", price: "$2.00", shotPrice: "$2.00", btlPrice: "$45.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Southern Comfort", price: "$2.00", shotPrice: "$2.00", btlPrice: "$35.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Monkey Shoulder", price: "$3.00", shotPrice: "$3.00", btlPrice: "$60.00", category: "spirits", subcategory: "Whiskey" },
+
+            { name: "Havana White Rum", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Spiced Gold", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Dark Rum", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Stroh Rum", price: "$3.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Smirnoff Red 1818", price: "$1.50", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Skyy Vodka", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Ciroc", price: "$70.00", btlPrice: "$70.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Absolut Vodka", price: "$3.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Inverroche Amber", price: "$4.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Inverroche Classic", price: "$4.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Beefeater Gin", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Beefeater Strawberry", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Bombay Sapphire", price: "$3.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Gordons Gin", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Malfy Gin", price: "$3.00", category: "spirits", subcategory: "Spirits & Rums" },
+            { name: "Tanqueray Gin", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
+
+            { name: "Hennessy VS", price: "$3.00", shotPrice: "$3.00", btlPrice: "$120.00", category: "spirits", subcategory: "Cognacs" },
+            { name: "Hennessy VSOP", price: "$120.00", btlPrice: "$120.00", category: "spirits", subcategory: "Cognacs" },
+            { name: "Remy Martin VSOP", price: "$120.00", btlPrice: "$120.00", category: "spirits", subcategory: "Cognacs" },
+            { name: "Remy Martin XO", price: "$300.00", btlPrice: "$300.00", category: "spirits", subcategory: "Cognacs" },
+
+            { name: "Don Julio Tequila", price: "$3.00", shotPrice: "$3.00", category: "spirits", subcategory: "Tequila" },
+            { name: "Olmeca Black", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Tequila" },
+            { name: "Olmeca Silver", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Tequila" },
+
+            // --- BEERS & COOLERS ---
+            { name: "Amstel", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Amstel Lite", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Black Label", price: "$2.00", category: "beers", subcategory: "Beers" },
+            { name: "Budweiser", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Castle Lager", price: "$2.00", category: "beers", subcategory: "Beers" },
+            { name: "Castle Lite", price: "$2.50", category: "beers", subcategory: "Beers" },
+            { name: "Golden Pilsener", price: "$2.00", category: "beers", subcategory: "Beers" },
+            { name: "Heineken", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Millers Draft", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Stella Artois", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Windhoek Draught", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Windhoek Lager", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Zambezi", price: "$2.00", category: "beers", subcategory: "Beers" },
+            { name: "Corona", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Flying Fish Lemon", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Zambezi Draught", price: "$2.50", category: "beers", subcategory: "Beers" },
+            { name: "CBL Draught", price: "$2.50", category: "beers", subcategory: "Beers" },
+
+            { name: "Bernini Classic", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            { name: "Belgravia Dry Lemon", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            { name: "Hunters Extreme", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            { name: "Hunters Dry", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            { name: "Hunters Gold", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            { name: "Brutal Fruit Apple", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            { name: "Savanna Dry", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            { name: "Smirnoff Spin", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            { name: "Smirnoff Storm", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            { name: "Smirnoff Guarana", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+
+            // --- WINES & CHAMPAGNE ---
+            { name: "Nederburg Merlot", price: "$15.00", category: "wines", subcategory: "Red Wine" },
+            { name: "Nederburg Shiraz", price: "$15.00", category: "wines", subcategory: "Red Wine" },
+            { name: "Porcupine Ridge Merlot", price: "$14.00", category: "wines", subcategory: "Red Wine" },
+            { name: "Robertson Merlot", price: "$12.00", category: "wines", subcategory: "Red Wine" },
+            { name: "Robertson Pinotage", price: "$12.00", category: "wines", subcategory: "Red Wine" },
+            { name: "R & R Classique", price: "$35.00", category: "wines", subcategory: "Red Wine" },
+            { name: "Nederburg Barone", price: "$14.00", category: "wines", subcategory: "Red Wine" },
+
+            { name: "Nederburg Sauv Blanc", price: "$14.00", category: "wines", subcategory: "White Wine" },
+            { name: "Nederburg Lyric", price: "$14.00", category: "wines", subcategory: "White Wine" },
+            { name: "Porcupine Ridge SV Blanc", price: "$14.00", category: "wines", subcategory: "White Wine" },
+
+            { name: "Nederburg Rose", price: "$14.00", category: "wines", subcategory: "Rose Wine" },
+            { name: "Robertson Rose", price: "$14.00", category: "wines", subcategory: "Rose Wine" },
+
+            { name: "Belaire Bleu", price: "$85.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "Belaire Rare Rose", price: "$150.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "Belaire Rose", price: "$85.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "Moët Nectar Imperial", price: "$120.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "Moët Ice Imperial", price: "$120.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "Moët Nectar Imperial Rose", price: "$120.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "Veuve Rich", price: "$150.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "Veuve Brut", price: "$120.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "J C Le Roux Le Flaurette", price: "$12.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "J C Le Roux La Chanson", price: "$12.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            { name: "J C Le Roux Le Domaine", price: "$12.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+
+            // --- SOFT DRINKS & JUICES ---
+            { name: "Redbull", price: "$3.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "B52", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Dry Lemon", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Ginger Ale", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Soda Water", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Tonic Water", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Lemonade", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Coke", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Cherry Plum", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Stoney Ginger Beer", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Fanta Orange", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Still Water", price: "$1.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Appletizer", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Cream Soda", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Sparkling Water", price: "$1.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Roses Passion Fusion", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Roses Lime Fusion", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Pine Nut", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            { name: "Go Energy", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+
+            { name: "Liquifruit Apple", price: "$2.00", category: "beverages", subcategory: "Juices" },
+            { name: "Liquifruit Cranberry", price: "$2.00", category: "beverages", subcategory: "Juices" },
+            { name: "Mango & Orange", price: "$2.00", category: "beverages", subcategory: "Juices" },
+            { name: "Passion Power", price: "$2.00", category: "beverages", subcategory: "Juices" }
+        ];
+
+        let activeCategory = 'all';
+        let searchQuery = '';
+
+        // Cart State Management
+        let cart = {};
+
+        function escapeJs(str) {
+            if (!str) return '';
+            return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        }
+
+        function parsePrice(priceStr) {
+            if (!priceStr) return 0;
+            const clean = priceStr.replace(/[^0-9.]/g, '');
+            const val = parseFloat(clean);
+            return isNaN(val) ? 0 : val;
+        }
+
+        function addDrinkByIndex(originalIdx, option, priceStr) {
+            const drink = drinksData[originalIdx];
+            if (!drink) return;
+
+            const name = drink.name;
+            const price = parsePrice(priceStr || drink.price);
+            const id = option ? `${name} (${option})` : name;
+
+            if (cart[id]) {
+                cart[id].qty++;
+            } else {
+                cart[id] = { id, name, option, price, qty: 1 };
+            }
+
+            showToast("Added to order");
+            updateCartUI();
+            renderMenu();
+        }
+
+        function updateQuantityById(id, delta) {
+            if (cart[id]) {
+                cart[id].qty += delta;
+                if (cart[id].qty <= 0) {
+                    delete cart[id];
+                }
+                updateCartUI();
+                renderMenu();
+            }
+        }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            const toastMsg = document.getElementById('toast-message');
+            if (!toast || !toastMsg) return;
+
+            toastMsg.textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('visible');
+
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('visible');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 1800);
+        }
+
+        function updateCartUI() {
+            const items = Object.values(cart);
+            let totalQty = 0;
+            let subtotal = 0;
+
+            items.forEach(item => {
+                totalQty += item.qty;
+                subtotal += item.price * item.qty;
+            });
+
+            const floatingBar = document.getElementById('cart-floating-bar');
+            const badge = document.getElementById('cart-bar-badge');
+            const itemsText = document.getElementById('cart-bar-items-text');
+            const subtotalText = document.getElementById('cart-bar-subtotal');
+
+            if (totalQty > 0) {
+                floatingBar.classList.remove('hidden');
+                badge.textContent = totalQty;
+                itemsText.textContent = `${totalQty} ${totalQty === 1 ? 'Item' : 'Items'}`;
+                subtotalText.textContent = `$${subtotal.toFixed(2)}`;
+            } else {
+                floatingBar.classList.add('hidden');
+                closeCartModal();
+            }
+
+            const modalSubtotal = document.getElementById('cart-modal-subtotal');
+            if (modalSubtotal) {
+                modalSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            }
+
+            renderCartModalItems();
+        }
+
+        function renderCartModalItems() {
+            const itemsContainer = document.getElementById('cart-modal-items');
+            if (!itemsContainer) return;
+
+            const items = Object.values(cart);
+            if (items.length === 0) {
+                itemsContainer.innerHTML = `
+                    <div class="empty-cart-msg">
+                        <p>Your order is currently empty.</p>
+                        <p style="margin-top: 4px; font-size: 0.78rem; opacity: 0.6;">Select drinks from the menu to start your order.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            items.forEach(item => {
+                const lineTotal = item.price * item.qty;
+                const displayName = item.option ? `${item.name} (${item.option})` : item.name;
+                const safeId = escapeJs(item.id);
+
+                html += `
+                    <div class="cart-item-row">
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${displayName}</div>
+                            <div class="cart-item-pricing">$${item.price.toFixed(2)} each</div>
+                        </div>
+                        <div class="cart-item-qty-group">
+                            <div class="card-qty-control compact">
+                                <button class="qty-btn" onclick="updateQuantityById('${safeId}', -1)">−</button>
+                                <span class="qty-count">${item.qty}</span>
+                                <button class="qty-btn" onclick="updateQuantityById('${safeId}', 1)">+</button>
+                            </div>
+                            <div class="cart-item-total">$${lineTotal.toFixed(2)}</div>
+                            <button class="cart-item-remove" onclick="updateQuantityById('${safeId}', -${item.qty})" title="Remove item">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            itemsContainer.innerHTML = html;
+        }
+
+        function openCartModal() {
+            const modalBackdrop = document.getElementById('cart-modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeCartModal() {
+            const modalBackdrop = document.getElementById('cart-modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function closeCartModalOnBackdrop(e) {
+            if (e.target.id === 'cart-modal-backdrop') {
+                closeCartModal();
+            }
+        }
+
+        function submitOrderToWhatsApp() {
+            const items = Object.values(cart);
+            if (items.length === 0) return;
+
+            const tableInput = document.getElementById('table-number-input');
+            const errorMsg = document.getElementById('table-number-error');
+            const tableNumber = tableInput ? tableInput.value.trim() : '';
+
+            if (!tableNumber) {
+                if (tableInput) {
+                    tableInput.classList.add('input-error');
+                    tableInput.focus();
+                }
+                if (errorMsg) {
+                    errorMsg.classList.remove('hidden');
+                }
+                showToast("Please enter your table number.");
+                return;
+            }
+
+            if (tableInput) tableInput.classList.remove('input-error');
+            if (errorMsg) errorMsg.classList.add('hidden');
+
+            const lines = [
+                "SAINTS N’ SINNERS — BAR ORDER 🍸",
+                "",
+                `Table: ${tableNumber}`,
+                ""
+            ];
+
+            let grandTotal = 0;
+            items.forEach(item => {
+                const lineTotal = item.price * item.qty;
+                grandTotal += lineTotal;
+                const nameStr = item.option ? `${item.name} (${item.option})` : item.name;
+                lines.push(`${item.qty} × ${nameStr} — $${lineTotal.toFixed(2)}`);
+            });
+
+            lines.push("");
+            lines.push(`TOTAL — $${grandTotal.toFixed(2)}`);
+            lines.push("");
+            lines.push("Please confirm my order. Thank you.");
+
+            const fullMessage = lines.join("\n");
+            const encodedMessage = encodeURIComponent(fullMessage);
+            const whatsappUrl = `https://wa.me/263788235062?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableInput = document.getElementById('table-number-input');
+            const errorMsg = document.getElementById('table-number-error');
+            if (tableInput) {
+                tableInput.addEventListener('input', () => {
+                    if (tableInput.value.trim()) {
+                        tableInput.classList.remove('input-error');
+                        if (errorMsg) errorMsg.classList.add('hidden');
+                    }
+                });
+            }
+        });
+
+        const renderTarget = document.getElementById('menu-render-target');
+        const searchInput = document.getElementById('search-input');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+
+        function renderMenu() {
+            renderTarget.innerHTML = '';
+
+            // Filter items based on activeCategory and searchQuery
+            const filtered = drinksData.filter(item => {
+                const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+                const matchesSearch = !searchQuery || 
+                    item.name.toLowerCase().includes(searchQuery) ||
+                    (item.desc && item.desc.toLowerCase().includes(searchQuery)) ||
+                    item.subcategory.toLowerCase().includes(searchQuery) ||
+                    (item.price && item.price.toLowerCase().includes(searchQuery));
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                renderTarget.innerHTML = `<div class="no-results">No drinks found matching "${searchQuery}".</div>`;
+                return;
+            }
+
+            // Group filtered items by subcategory
+            const grouped = {};
+            filtered.forEach(item => {
+                if (!grouped[item.subcategory]) {
+                    grouped[item.subcategory] = [];
+                }
+                grouped[item.subcategory].push(item);
+            });
+
+            // Render each subcategory section
+            Object.keys(grouped).forEach(subcatName => {
+                const subSection = document.createElement('div');
+                
+                const titleHtml = `<h2 class="subcategory-title">
+                    <span>${subcatName}</span>
+                    <span class="item-count-badge">${grouped[subcatName].length} ${grouped[subcatName].length === 1 ? 'ITEM' : 'ITEMS'}</span>
+                </h2>`;
+
+                let cardsHtml = '<div class="drink-grid">';
+                grouped[subcatName].forEach(drink => {
+                    const originalIdx = drinksData.indexOf(drink);
+
+                    let priceHtml = '';
+                    if (drink.shotPrice && drink.btlPrice) {
+                        priceHtml = `
+                            <div class="drink-price-group">
+                                <span class="price-badge">${drink.shotPrice}</span>
+                                <span class="price-sub">Shot</span>
+                                <span class="price-badge" style="margin-top: 3px;">${drink.btlPrice}</span>
+                                <span class="price-sub">Bottle</span>
+                            </div>
+                        `;
+                    } else if (drink.btlPrice) {
+                        priceHtml = `
+                            <div class="drink-price-group">
+                                <span class="price-badge">${drink.btlPrice}</span>
+                                <span class="price-sub">Bottle</span>
+                            </div>
+                        `;
+                    } else if (drink.shotPrice) {
+                        priceHtml = `
+                            <div class="drink-price-group">
+                                <span class="price-badge">${drink.shotPrice}</span>
+                                <span class="price-sub">Shot</span>
+                            </div>
+                        `;
+                    } else {
+                        priceHtml = `
+                            <div class="drink-price-group">
+                                <span class="price-badge">${drink.price}</span>
+                            </div>
+                        `;
+                    }
+
+                    // Build ordering action buttons for this drink
+                    let actionsHtml = '';
+                    if (drink.shotPrice && drink.btlPrice) {
+                        const shotId = `${drink.name} (Shot)`;
+                        const btlId = `${drink.name} (Bottle)`;
+                        const shotQty = cart[shotId] ? cart[shotId].qty : 0;
+                        const btlQty = cart[btlId] ? cart[btlId].qty : 0;
+
+                        const shotCtrl = shotQty > 0 ? `
+                            <div class="card-qty-control compact">
+                                <button class="qty-btn" onclick="updateQuantityById('${escapeJs(shotId)}', -1)">−</button>
+                                <span class="qty-count">Shot × ${shotQty}</span>
+                                <button class="qty-btn" onclick="updateQuantityById('${escapeJs(shotId)}', 1)">+</button>
+                            </div>
+                        ` : `
+                            <button class="add-option-btn" onclick="addDrinkByIndex(${originalIdx}, 'Shot', '${drink.shotPrice}')">+ Shot (${drink.shotPrice})</button>
+                        `;
+
+                        const btlCtrl = btlQty > 0 ? `
+                            <div class="card-qty-control compact">
+                                <button class="qty-btn" onclick="updateQuantityById('${escapeJs(btlId)}', -1)">−</button>
+                                <span class="qty-count">Btl × ${btlQty}</span>
+                                <button class="qty-btn" onclick="updateQuantityById('${escapeJs(btlId)}', 1)">+</button>
+                            </div>
+                        ` : `
+                            <button class="add-option-btn" onclick="addDrinkByIndex(${originalIdx}, 'Bottle', '${drink.btlPrice}')">+ Bottle (${drink.btlPrice})</button>
+                        `;
+
+                        actionsHtml = `
+                            <div class="drink-actions">
+                                <div class="dual-option-row">
+                                    ${shotCtrl}
+                                    ${btlCtrl}
+                                </div>
+                            </div>
+                        `;
+                    } else if (drink.btlPrice && !drink.shotPrice) {
+                        const btlId = `${drink.name} (Bottle)`;
+                        const btlQty = cart[btlId] ? cart[btlId].qty : 0;
+
+                        if (btlQty > 0) {
+                            actionsHtml = `
+                                <div class="drink-actions">
+                                    <div class="card-qty-control">
+                                        <button class="qty-btn" onclick="updateQuantityById('${escapeJs(btlId)}', -1)">−</button>
+                                        <span class="qty-count">${btlQty} Bottle in order</span>
+                                        <button class="qty-btn" onclick="updateQuantityById('${escapeJs(btlId)}', 1)">+</button>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            actionsHtml = `
+                                <div class="drink-actions">
+                                    <button class="add-btn-single" onclick="addDrinkByIndex(${originalIdx}, 'Bottle', '${drink.btlPrice}')">
+                                        <span>+</span> Add Bottle (${drink.btlPrice})
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    } else if (drink.shotPrice && !drink.btlPrice) {
+                        const shotId = `${drink.name} (Shot)`;
+                        const shotQty = cart[shotId] ? cart[shotId].qty : 0;
+
+                        if (shotQty > 0) {
+                            actionsHtml = `
+                                <div class="drink-actions">
+                                    <div class="card-qty-control">
+                                        <button class="qty-btn" onclick="updateQuantityById('${escapeJs(shotId)}', -1)">−</button>
+                                        <span class="qty-count">${shotQty} Shot in order</span>
+                                        <button class="qty-btn" onclick="updateQuantityById('${escapeJs(shotId)}', 1)">+</button>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            actionsHtml = `
+                                <div class="drink-actions">
+                                    <button class="add-btn-single" onclick="addDrinkByIndex(${originalIdx}, 'Shot', '${drink.shotPrice}')">
+                                        <span>+</span> Add Shot (${drink.shotPrice})
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        const itemId = drink.name;
+                        const qty = cart[itemId] ? cart[itemId].qty : 0;
+
+                        if (qty > 0) {
+                            actionsHtml = `
+                                <div class="drink-actions">
+                                    <div class="card-qty-control">
+                                        <button class="qty-btn" onclick="updateQuantityById('${escapeJs(itemId)}', -1)">−</button>
+                                        <span class="qty-count">${qty} in order</span>
+                                        <button class="qty-btn" onclick="updateQuantityById('${escapeJs(itemId)}', 1)">+</button>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            actionsHtml = `
+                                <div class="drink-actions">
+                                    <button class="add-btn-single" onclick="addDrinkByIndex(${originalIdx}, '', '${drink.price}')">
+                                        <span>+</span> Add to Order
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    }
+
+                    cardsHtml += `
+                        <div class="drink-card">
+                            <div class="drink-top">
+                                <h3 class="drink-name">${drink.name}</h3>
+                                ${priceHtml}
+                            </div>
+                            ${drink.desc ? `<p class="drink-desc">${drink.desc}</p>` : ''}
+                            ${actionsHtml}
+                        </div>
+                    `;
+                });
+                cardsHtml += '</div>';
+
+                subSection.innerHTML = titleHtml + cardsHtml;
+                renderTarget.appendChild(subSection);
+            });
+        }
+
+        // Tab selection events
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeCategory = btn.getAttribute('data-category');
+                renderMenu();
+            });
+        });
+
+        // Search input event
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim().toLowerCase();
+            renderMenu();
+        });
+
+        // Initial Render
+        renderMenu();
+
+        // Ambient Particle Canvas
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            const particles = [];
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.init();
+                }
+                init() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 1.5 + 0.5;
+                    this.speedX = Math.random() * 0.2 - 0.1;
+                    this.speedY = Math.random() * 0.3 - 0.15;
+                    this.opacity = Math.random() * 0.35 + 0.08;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                        this.init();
+                    }
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(255, 204, 51, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 35; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+    </script>
+</body>
+</html>
