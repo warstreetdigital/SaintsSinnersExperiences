@@ -1770,7 +1770,7 @@
                                 </div>
                             </div>
                         `;
-                    } else if (subcatName === 'Classic Cocktails') {
+                    } else if (subcatName === 'Classics' || subcatName === 'Classic Cocktails' || subcatName === 'Specialities' || subcatName === 'Dessert Cocktails') {
                         bannerHtml = `
                             <div class="editorial-banner-card">
                                 <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/d865c3416ecdb51798199ff2a61dfe6a.jpg" alt="Signature Drinks" />
@@ -1780,23 +1780,63 @@
                                 </div>
                             </div>
                         `;
+                    } else if (subcatName === 'Mocktails') {
+                        bannerHtml = `
+                            <div class="editorial-banner-card">
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Mocktails.jpg" alt="Mocktails & Refreshers" />
+                                <div class="editorial-banner-overlay">
+                                    <span class="editorial-tag">ZERO PROOF</span>
+                                    <h3 class="editorial-title">Mocktails & Artisanal Refreshers</h3>
+                                </div>
+                            </div>
+                        `;
                     } else if (subcatName === 'Whiskey') {
                         bannerHtml = `
                             <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/28c86921ced7dffd814b8e99c725488b.jpg" alt="Whiskey & Spirits" />
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/28c86921ced7dffd814b8e99c725488b.jpg" alt="Whiskey & Reserve" />
                                 <div class="editorial-banner-overlay">
                                     <span class="editorial-tag">ATMOSPHERE</span>
                                     <h3 class="editorial-title">Whiskey, Spirits & Fine Liquors</h3>
                                 </div>
                             </div>
                         `;
-                    } else if (subcatName === 'Aphrodisiacs' || subcatName === 'Beers') {
+                    } else if (subcatName === 'Spirits & Rums' || subcatName === 'Cognacs' || subcatName === 'Tequila') {
                         bannerHtml = `
                             <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/05b40712578eccd594e796ea0096306f.jpg" alt="Bar Preparation" />
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Vdka.jpg" alt="Vodka & Fine Spirits" />
+                                <div class="editorial-banner-overlay">
+                                    <span class="editorial-tag">PREMIUM LIQUORS</span>
+                                    <h3 class="editorial-title">Vodka, Gin, Rums & Cognacs</h3>
+                                </div>
+                            </div>
+                        `;
+                    } else if (subcatName === 'Champagnes & Sparkling Wines' || subcatName === 'Red Wine' || subcatName === 'White Wine' || subcatName === 'Rose Wine') {
+                        bannerHtml = `
+                            <div class="editorial-banner-card">
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Champagne.jpg" alt="Champagne & Fine Wines" />
+                                <div class="editorial-banner-overlay">
+                                    <span class="editorial-tag">CELEBRATION</span>
+                                    <h3 class="editorial-title">Champagnes, Sparkling & Reserve Wines</h3>
+                                </div>
+                            </div>
+                        `;
+                    } else if (subcatName === 'Soft Drinks') {
+                        bannerHtml = `
+                            <div class="editorial-banner-card">
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Soft%20drinks.jpg" alt="Soft Drinks & Mixers" />
+                                <div class="editorial-banner-overlay">
+                                    <span class="editorial-tag">BEVERAGES</span>
+                                    <h3 class="editorial-title">Soft Drinks, Juices & Energy</h3>
+                                </div>
+                            </div>
+                        `;
+                    } else if (subcatName === 'Party Shots' || subcatName === 'Aphrodisiacs' || subcatName === 'Pyro' || subcatName === 'Beers' || subcatName === 'Ciders & Spirit Coolers') {
+                        bannerHtml = `
+                            <div class="editorial-banner-card">
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/05b40712578eccd594e796ea0096306f.jpg" alt="Bar Craft & Shooters" />
                                 <div class="editorial-banner-overlay">
                                     <span class="editorial-tag">FROM THE BAR</span>
-                                    <h3 class="editorial-title">Artisanal Preparation</h3>
+                                    <h3 class="editorial-title">Shooters, Chilled Beers & Craft Coolers</h3>
                                 </div>
                             </div>
                         `;
