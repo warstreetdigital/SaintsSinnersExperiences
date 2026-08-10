@@ -205,6 +205,51 @@
             display: none;
         }
 
+        .subcat-pills-wrapper {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 8px 4px 4px 4px;
+            margin-top: 4px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .subcat-pills-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+        .subcat-pill-btn {
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 204, 51, 0.2);
+            border-radius: 20px;
+            color: #bbb;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(8px);
+        }
+        .subcat-pill-btn:hover {
+            color: #fff;
+            border-color: rgba(255, 204, 51, 0.5);
+            background: rgba(255, 204, 51, 0.08);
+        }
+        .subcat-pill-btn.active {
+            background: rgba(255, 204, 51, 0.18);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(255, 204, 51, 0.15);
+        }
+        .price-badge.price-tbc {
+            color: #aaa;
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            font-size: 0.75rem;
+        }
+
         .tab-btn {
             white-space: nowrap;
             padding: 9px 18px;
@@ -317,8 +362,38 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
+            justify-content: flex-start;
             gap: 3px;
             flex-shrink: 0;
+            text-align: right;
+        }
+
+        .price-line {
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+            white-space: nowrap;
+            display: flex;
+            align-items: baseline;
+            justify-content: flex-end;
+            gap: 5px;
+            line-height: 1.25;
+        }
+
+        .price-label {
+            font-size: 0.76rem;
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        .price-val {
+            font-family: var(--font-serif);
+            font-size: 1.12rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            letter-spacing: 0.3px;
         }
 
         .price-badge {
@@ -1075,11 +1150,18 @@
                 <button class="tab-btn" data-category="cocktails">Cocktails</button>
                 <button class="tab-btn" data-category="mocktails">Mocktails</button>
                 <button class="tab-btn" data-category="shooters">Shooters</button>
-                <button class="tab-btn" data-category="spirits">Whiskey & Spirits</button>
-                <button class="tab-btn" data-category="beers">Beers & Coolers</button>
-                <button class="tab-btn" data-category="wines">Wines & Champagne</button>
-                <button class="tab-btn" data-category="beverages">Soft Drinks & Juices</button>
+                <button class="tab-btn" data-category="beers">Beers</button>
+                <button class="tab-btn" data-category="ciders">Ciders & Coolers</button>
+                <button class="tab-btn" data-category="spirits">Spirits</button>
+                <button class="tab-btn" data-category="wine">Wine</button>
+                <button class="tab-btn" data-category="champagne">Champagne & Sparkling</button>
+                <button class="tab-btn" data-category="soft-drinks">Soft Drinks</button>
+                <button class="tab-btn" data-category="juices">Juices</button>
+                <button class="tab-btn" data-category="mixers">Mixers</button>
+                <button class="tab-btn" data-category="energy">Energy Drinks</button>
+                <button class="tab-btn" data-category="water">Water</button>
             </div>
+            <div id="subcat-pills-wrapper" class="subcat-pills-wrapper hidden"></div>
         </div>
 
         <!-- Menu Render Target Container -->
@@ -1149,193 +1231,265 @@
     </div>
 
     <script>
-        // MASTER DRINKS DATASET (100% Extracted from Official PDF)
+        // MASTER DRINKS DATASET (100% Extracted & Structured According to Official Hierarchy)
         const drinksData = [
-            // --- COCKTAILS ---
+            // ================= 01. COCKTAILS =================
+            // Signature Cocktails
             { name: "Saints Margarita", price: "$5.00", category: "cocktails", subcategory: "Signature Cocktails", desc: "A slight twist of the original. Too many of these and you will be seeing dos." },
             { name: "I've Gin Expecting You", price: "$9.00", category: "cocktails", subcategory: "Signature Cocktails", desc: "Okay, are you ready to have that conversation?" },
-            
-            { name: "Blue Hawaiian", price: "$7.00", category: "cocktails", subcategory: "Specialities", desc: "Hawaii is here!" },
-            { name: "Diamonds & Crystals", price: "$8.00", category: "cocktails", subcategory: "Specialities", desc: "Gordons gin, elderflower syrup, monin cucumber, fresh mint, fresh lime, fresh cucumber topped up with soda water." },
+            { name: "Lady Posh", price: "$6.00", category: "cocktails", subcategory: "Signature Cocktails", desc: "Lovoka caramel, menthe, white cacao, rose syrup and cream." },
+            { name: "Sinner", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails", desc: "Signature Saints n' Sinners creation." },
+            { name: "Saint Adam", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Saint Posh", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Purple Rain", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Saint", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Perfectly Pink", price: "$9.00", category: "cocktails", subcategory: "Signature Cocktails", desc: "Strawberry puree, amaretto, southern comfort, strawberry liqueur, chambord, ice cream. Blend frozen." },
+            { name: "Between the Sheets", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Gin & Sin", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Hot Blender", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Love Potion", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Diamonds & Crystals", price: "$8.00", category: "cocktails", subcategory: "Signature Cocktails", desc: "Gordons gin, elderflower syrup, monin cucumber, fresh mint, fresh lime, fresh cucumber topped up with soda water." },
+            { name: "Pink Lady", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Whispering Eye", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Silk Panties", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
+            { name: "Strawberry Moonshine", price: "Price TBC", category: "cocktails", subcategory: "Signature Cocktails" },
 
+            // Classic Cocktails
+            { name: "Mojito", price: "$7.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Double rum infused with mint, lime topped with soda water." },
+            { name: "Strawberry Mojito", price: "Price TBC", category: "cocktails", subcategory: "Classic Cocktails" },
+            { name: "Mai Tai", price: "$7.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Bacardi, spiced rum, dark rum, orange juice, pineapple juice, grenadine and float amaretto." },
+            { name: "Sex on the Beach", price: "$5.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Vodka, peach schnapps, cassis, orange juice, cranberry juice." },
+            { name: "Strawberry Daiquiri", price: "$7.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Rum, strawberry liqueur, strawberry puree, grenadine and sour mix." },
+            { name: "Peach Daiquiri", price: "Price TBC", category: "cocktails", subcategory: "Classic Cocktails" },
+            { name: "Margarita", price: "$5.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Tequila gold, triple sec, lime cordial and lemon juice." },
+            { name: "Tequila Sunrise", price: "$5.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "A double shot of Jose Cuervo Gold, orange juice and grenadine." },
+            { name: "Elderflower Gin Fizz", price: "Price TBC", category: "cocktails", subcategory: "Classic Cocktails" },
+            { name: "Blue Hawaiian", price: "$7.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Hawaii is here!" },
+            { name: "Piña Colada", price: "$6.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Bacardi, malibu, spiced gold, cream, passionfruit cordial, fresh pineapple and pineapple juice." },
+            { name: "Cosmopolitan", price: "$5.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Vodka, triple sec, lime cordial and cranberry juice." },
+            { name: "Whiskey Sour", price: "$5.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Double Jack Daniels, egg, lemonade." },
+            { name: "Old Fashioned", price: "$6.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "The old fashioned is a cocktail made of muddling sugar with bitters, adding whiskey." },
+            { name: "Gin Sour", price: "Price TBC", category: "cocktails", subcategory: "Classic Cocktails" },
+            { name: "Pornstar Martini", price: "Price TBC", category: "cocktails", subcategory: "Classic Cocktails" },
+            { name: "French Martini", price: "Price TBC", category: "cocktails", subcategory: "Classic Cocktails" },
+            { name: "Negroni", price: "Price TBC", category: "cocktails", subcategory: "Classic Cocktails" },
+            { name: "Long Island Ice Tea", price: "$8.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Five spirits, sour mix, topped with coke." },
+            { name: "Zombie", price: "$8.00", category: "cocktails", subcategory: "Classic Cocktails", desc: "Watch out now! It just might be the walking dead all over again." },
+
+            // Speciality Cocktails
+            { name: "Blue Hawaiian (Speciality)", price: "$7.00", category: "cocktails", subcategory: "Speciality Cocktails", desc: "Hawaii is here! Signature blue tropical blend." },
+            { name: "Diamonds & Crystals (Speciality)", price: "$8.00", category: "cocktails", subcategory: "Speciality Cocktails", desc: "Gordons gin, elderflower syrup, monin cucumber, fresh mint, fresh lime, fresh cucumber topped up with soda water." },
+
+            // Dessert Cocktails
             { name: "Choc Chip Cookie", price: "$7.00", category: "cocktails", subcategory: "Dessert Cocktails", desc: "Choc chips blended with ice cream and amarula, menthe, white cacao." },
-            { name: "Perfectly Pink", price: "$9.00", category: "cocktails", subcategory: "Dessert Cocktails", desc: "Strawberry puree, amaretto, southern comfort, strawberry liqueur, chambord, ice cream. Blend frozen." },
-            { name: "Lady Posh", price: "$6.00", category: "cocktails", subcategory: "Dessert Cocktails", desc: "Lovoka caramel, menthe, white cacao, rose syrup and cream." },
+            { name: "Perfectly Pink (Dessert)", price: "$9.00", category: "cocktails", subcategory: "Dessert Cocktails", desc: "Strawberry puree, amaretto, southern comfort, strawberry liqueur, chambord, ice cream. Blend frozen." },
+            { name: "Lady Posh (Dessert)", price: "$6.00", category: "cocktails", subcategory: "Dessert Cocktails", desc: "Lovoka caramel, menthe, white cacao, rose syrup and cream." },
 
-            { name: "Mojito", price: "$7.00", category: "cocktails", subcategory: "Classics", desc: "Double rum infused with mint, lime topped with soda water." },
-            { name: "Strawberry Daquiri", price: "$7.00", category: "cocktails", subcategory: "Classics", desc: "Rum, strawberry liqueur, strawberry puree, grenadine and sour mix." },
-            { name: "Long Island Ice Tea", price: "$8.00", category: "cocktails", subcategory: "Classics", desc: "Five spirits, sour mix, topped with coke." },
-            { name: "Zombie", price: "$8.00", category: "cocktails", subcategory: "Classics", desc: "Watch out now! It just might be the walking dead all over again." },
-            { name: "Pina Colada", price: "$6.00", category: "cocktails", subcategory: "Classics", desc: "Bacardi, malibu, spiced gold, cream, passionfruit cordial, fresh pineapple and pineapple juice." },
-            { name: "Tequila Sunrise", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "A double shot of Jose Cuervo Gold, orange juice and grenadine." },
-            { name: "Sex on the Beach", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "Vodka, peach schnapps, cassis, orange juice, cranberry juice." },
-            { name: "Cosmopolitan", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "Vodka, triple sec, lime cordial and cranberry juice." },
-            { name: "Old Fashioned", price: "$6.00", category: "cocktails", subcategory: "Classics", desc: "The old fashioned is a cocktail made of muddling sugar with bitters, adding whiskey." },
-            { name: "Margarita", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "Tequila gold, triple sec, lime cordial and lemon juice." },
-            { name: "Whiskey Sour", price: "$5.00", category: "cocktails", subcategory: "Classics", desc: "Double Jack Daniels, egg, lemonade." },
-            { name: "Mai Tai", price: "$7.00", category: "cocktails", subcategory: "Classics", desc: "Bacardi, spiced rum, dark rum, orange juice, pineapple juice, grenadine and float amaretto." },
-
-            // --- MOCKTAILS ---
+            // ================= 02. MOCKTAILS =================
             { name: "Strawberry Lemonade", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Strawberry puree, sour mix and topped up with soda water." },
             { name: "Blueberry Lemonade", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Blueberry puree, sour mix and topped up with soda water." },
-            { name: "Virgin Daquiri", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Comes in different flavours: peach, strawberry and watermelon." },
-            { name: "Peach Lemonade", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Peach puree, sour mix. Topped up with soda water." },
+            { name: "Virgin Daiquiri", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Comes in different flavours: peach, strawberry and watermelon." },
             { name: "Virgin Mojito", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Fresh lemon, wild mint syrup, mint leaves. Topped up with soda water." },
+            { name: "Peach Lemonade", price: "$5.00", category: "mocktails", subcategory: "Mocktails", desc: "Peach puree, sour mix. Topped up with soda water." },
 
-            // --- SHOOTERS ---
+            // ================= 03. SHOOTERS =================
+            // Party Shots
             { name: "Liquid Cocaine", price: "$5.00", category: "shooters", subcategory: "Party Shots", desc: "Vodka, blue curacao and lime. Shaken." },
             { name: "Moonshine", price: "$5.00", category: "shooters", subcategory: "Party Shots", desc: "Vodka, strawberry liqueur and lime. Shaken." },
-            { name: "Saints&Sinners Lolly", price: "$5.00", category: "shooters", subcategory: "Party Shots", desc: "Amarula, blue curacao, banana liqueur, grenadine and cream. Shaken." },
+            { name: "Saints & Sinners Lolly", price: "$5.00", category: "shooters", subcategory: "Party Shots", desc: "Amarula, blue curacao, banana liqueur, grenadine and cream. Shaken." },
+            { name: "Jagerbomb", price: "Price TBC", category: "shooters", subcategory: "Party Shots" },
+            { name: "Wet Pussy", price: "Price TBC", category: "shooters", subcategory: "Party Shots" },
+            { name: "Bob Marley", price: "Price TBC", category: "shooters", subcategory: "Party Shots" },
 
-            { name: "Chocolate Cake", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Frangelico and Absolut vanilla. Served with a lemon slice and brown sugar." },
-            { name: "Jelly Baby", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Grenadine, banana liqueur, blue curacao, amarula and malibu." },
-            { name: "G-Spot", price: "$5.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Kahlua, Jack Daniels, Southern Comfort and a drop of amarula." },
-            { name: "Shortcake", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Strawberry liqueur, amarula and fresh cream." },
-            { name: "Blowjob", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Kahlua, amarula and fresh cream." },
-            { name: "Springbokkie", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Creme de menthe and amarula." },
-            { name: "Teardrop", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Frangelico, amarula and nachtmuzik." },
-            { name: "Shit in the Forest", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Creme de menthe, amarula and nachtmuzik." },
-            { name: "Snowball", price: "$3.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Lupini Inferno, amarula and Bacardi." },
-            { name: "Slippery Nipple", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Zappa white, amarula and a cherry inside glass." },
-            { name: "Lollipop", price: "$2.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Creme de banana, blue curacao, amarula and 6 drops of grenadine." },
-            { name: "Rainbow Dragon", price: "$3.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Jagermeister, creme de menthe, gold tequila and nitro cinnamon." },
-            { name: "Blue Balls", price: "$3.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Blue curacao, peach schnapps and Olmeca black." },
-            { name: "Absintheminded", price: "$3.00", category: "shooters", subcategory: "Aphrodisiacs", desc: "Jagermeister, Olmeca black, absinthe and Stroh rum." },
+            // Aphrodisiac Shooters
+            { name: "Chocolate Cake", price: "$2.00", category: "shooters", subcategory: "Aphrodisiac Shooters", desc: "Frangelico and Absolut vanilla. Served with a lemon slice and brown sugar." },
+            { name: "Jelly Baby", price: "$2.00", category: "shooters", subcategory: "Aphrodisiac Shooters", desc: "Grenadine, banana liqueur, blue curacao, amarula and malibu." },
+            { name: "G-Spot", price: "$5.00", category: "shooters", subcategory: "Aphrodisiac Shooters", desc: "Kahlua, Jack Daniels, Southern Comfort and a drop of amarula." },
+            { name: "Shortcake", price: "$2.00", category: "shooters", subcategory: "Aphrodisiac Shooters", desc: "Strawberry liqueur, amarula and fresh cream." },
+            { name: "Blowjob", price: "$2.00", category: "shooters", subcategory: "Aphrodisiac Shooters", desc: "Kahlua, amarula and fresh cream." },
+            { name: "Springbokkie", price: "$2.00", category: "shooters", subcategory: "Aphrodisiac Shooters", desc: "Creme de menthe and amarula." },
+            { name: "Teardrop", price: "$2.00", category: "shooters", subcategory: "Aphrodisiac Shooters", desc: "Frangelico, amarula and nachtmuzik." },
 
-            { name: "Hot Mamma", price: "$3.00", category: "shooters", subcategory: "Pyro", desc: "Captain Morgan and cinnamon liqueur with 6 drops of tabasco." },
-            { name: "Flaming Lamborghini", price: "$8.00", category: "shooters", subcategory: "Pyro", desc: "We about to cook your brains, not for the faint hearted!" },
-            { name: "Saints 'n Sinners", price: "$5.00", category: "shooters", subcategory: "Pyro", desc: "Olmeca Black, Stroh rum. Served with an orange slice and brown sugar. Don't burn your lips!" },
-            { name: "Spicy Eve", price: "$3.00", category: "shooters", subcategory: "Pyro", desc: "Nitro cinnamon, amarula and absinthe." },
+            // Signature & Special Shooters
+            { name: "Shit in the Forest", price: "$2.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Creme de menthe, amarula and nachtmuzik." },
+            { name: "Snowball", price: "$3.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Lupini Inferno, amarula and Bacardi." },
+            { name: "Slippery Nipple", price: "$2.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Zappa white, amarula and a cherry inside glass." },
+            { name: "Lollipop", price: "$2.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Creme de banana, blue curacao, amarula and 6 drops of grenadine." },
+            { name: "Rainbow Dragon", price: "$3.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Jagermeister, creme de menthe, gold tequila and nitro cinnamon." },
+            { name: "Blue Balls", price: "$3.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Blue curacao, peach schnapps and Olmeca black." },
+            { name: "Absintheminded", price: "$3.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Jagermeister, Olmeca black, absinthe and Stroh rum." },
+            { name: "Hot Mamma", price: "$3.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Captain Morgan and cinnamon liqueur with 6 drops of tabasco." },
+            { name: "Spicy Eve", price: "$3.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Nitro cinnamon, amarula and absinthe." },
+            { name: "Saints 'n Sinners", price: "$5.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "Olmeca Black, Stroh rum. Served with an orange slice and brown sugar. Don't burn your lips!" },
+            { name: "Flaming Lamborghini", price: "$8.00", category: "shooters", subcategory: "Signature & Special Shooters", desc: "We about to cook your brains, not for the faint hearted!" },
+            { name: "Pyro", price: "Price TBC", category: "shooters", subcategory: "Signature & Special Shooters" },
 
-            // --- WHISKEY & SPIRITS ---
-            { name: "Bells", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "Don Julio", price: "$3.00", shotPrice: "$3.00", btlPrice: "$80.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "Glenfiddich 12yr", price: "$3.00", shotPrice: "$3.00", btlPrice: "$70.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "Glenfiddich 15yr", price: "$5.00", shotPrice: "$5.00", btlPrice: "$100.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "JW Gold Label", price: "$4.00", shotPrice: "$4.00", btlPrice: "$100.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "JW Black Label", price: "$3.00", shotPrice: "$3.00", btlPrice: "$50.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "JW Double Black", price: "$4.00", shotPrice: "$4.00", btlPrice: "$70.00", category: "spirits", subcategory: "Whiskey" },
+            // ================= 04. BEERS =================
+            { name: "Black Label", price: "$2.00", category: "beers", subcategory: "Beers" },
+            { name: "Castle Lager", price: "$2.00", category: "beers", subcategory: "Beers" },
+            { name: "Zambezi", price: "$2.00", category: "beers", subcategory: "Beers" },
+            { name: "Castle Lite", price: "$2.50", category: "beers", subcategory: "Beers" },
+            { name: "Corona", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Heineken", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Heineken Silver", price: "Price TBC", category: "beers", subcategory: "Beers" },
+            { name: "Stella Artois", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Millers Draft", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Windhoek Lager", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Windhoek Draught", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Budweiser", price: "$3.00", category: "beers", subcategory: "Beers" },
+            { name: "Flying Fish Lemon", price: "$3.00", category: "beers", subcategory: "Beers" },
+
+            // ================= 05. CIDERS & COOLERS =================
+            { name: "Belgravia Dry Lemon", price: "$3.00", category: "ciders", subcategory: "Ciders & Coolers" },
+            { name: "Brutal Fruit Apple", price: "$3.00", category: "ciders", subcategory: "Ciders & Coolers" },
+            { name: "Hunters Extreme", price: "$3.00", category: "ciders", subcategory: "Ciders & Coolers" },
+            { name: "Hunters Dry", price: "$3.00", category: "ciders", subcategory: "Ciders & Coolers" },
+            { name: "Hunters Gold", price: "$3.00", category: "ciders", subcategory: "Ciders & Coolers" },
+            { name: "Savanna Dry", price: "$3.00", category: "ciders", subcategory: "Ciders & Coolers" },
+            { name: "Smirnoff Spin", price: "$3.00", category: "ciders", subcategory: "Ciders & Coolers" },
+            { name: "Smirnoff Storm", price: "$3.00", category: "ciders", subcategory: "Ciders & Coolers" },
+            { name: "Smirnoff Guarana", price: "$3.00", category: "ciders", subcategory: "Ciders & Coolers" },
+            { name: "Smirnoff Ice", price: "Price TBC", category: "ciders", subcategory: "Ciders & Coolers" },
+
+            // ================= 06. SPIRITS =================
+            // Vodka
+            { name: "Smirnoff Red 1818", price: "$1.50", shotPrice: "$1.50", category: "spirits", subcategory: "Vodka" },
+            { name: "Skyy Vodka", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Vodka" },
+            { name: "Ciroc", price: "$70.00", btlPrice: "$70.00", category: "spirits", subcategory: "Vodka" },
+            { name: "Absolut Vodka", price: "$3.00", shotPrice: "$3.00", category: "spirits", subcategory: "Vodka" },
+
+            // Gin
+            { name: "Beefeater Gin", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Gin" },
+            { name: "Beefeater Strawberry", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Gin" },
+            { name: "Bombay Sapphire", price: "$3.00", shotPrice: "$3.00", category: "spirits", subcategory: "Gin" },
+            { name: "Gordon's Gin", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Gin" },
+            { name: "Malfy Gin", price: "$3.00", shotPrice: "$3.00", category: "spirits", subcategory: "Gin" },
+            { name: "Tanqueray Gin", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Gin" },
+            { name: "Inverroche Amber", price: "$4.00", shotPrice: "$4.00", category: "spirits", subcategory: "Gin" },
+            { name: "Inverroche Classic", price: "$4.00", shotPrice: "$4.00", category: "spirits", subcategory: "Gin" },
+
+            // Rum
+            { name: "Havana White Rum", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Rum" },
+            { name: "Spiced Gold", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Rum" },
+            { name: "Dark Rum", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Rum" },
+            { name: "Stroh Rum", price: "$3.00", shotPrice: "$3.00", category: "spirits", subcategory: "Rum" },
+
+            // Whiskey
+            { name: "Glenfiddich 12yr", price: "$3.00", shotPrice: "$3.00", btlPrice: "$80.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Glenfiddich 15yr", price: "$5.00", shotPrice: "$5.00", btlPrice: "$110.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Glenfiddich 18yr", price: "$200.00", btlPrice: "$200.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "JW Gold Label", price: "$4.00", shotPrice: "$4.00", btlPrice: "$110.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "JW Black Label", price: "$3.00", shotPrice: "$3.00", btlPrice: "$65.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "JW Double Black", price: "$4.00", shotPrice: "$4.00", btlPrice: "$80.00", category: "spirits", subcategory: "Whiskey" },
             { name: "JW Red Label", price: "$2.00", shotPrice: "$2.00", btlPrice: "$35.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "JW Blue Label", price: "$320.00", btlPrice: "$320.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "Jameson", price: "$2.00", shotPrice: "$2.00", btlPrice: "$45.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "Jameson Select", price: "$3.00", shotPrice: "$3.00", btlPrice: "$80.00", category: "spirits", subcategory: "Whiskey" },
-            { name: "J & B", price: "$1.50", shotPrice: "$1.50", btlPrice: "$33.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "JW Blue Label", price: "$480.00", btlPrice: "$480.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Jameson", price: "$2.00", shotPrice: "$2.00", btlPrice: "$50.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Jameson Black Barrel", price: "$80.00", btlPrice: "$80.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Jameson Select", price: "$3.00", shotPrice: "$3.00", btlPrice: "$85.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "J&B Single Barrel", price: "$1.50", shotPrice: "$1.50", btlPrice: "$80.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Chivas", price: "$45.00", btlPrice: "$45.00", category: "spirits", subcategory: "Whiskey" },
+            { name: "Gentleman Jack", price: "$55.00", btlPrice: "$55.00", category: "spirits", subcategory: "Whiskey" },
             { name: "Jack Daniels", price: "$2.00", shotPrice: "$2.00", btlPrice: "$45.00", category: "spirits", subcategory: "Whiskey" },
             { name: "Southern Comfort", price: "$2.00", shotPrice: "$2.00", btlPrice: "$35.00", category: "spirits", subcategory: "Whiskey" },
             { name: "Monkey Shoulder", price: "$3.00", shotPrice: "$3.00", btlPrice: "$60.00", category: "spirits", subcategory: "Whiskey" },
 
-            { name: "Havana White Rum", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Spiced Gold", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Dark Rum", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Stroh Rum", price: "$3.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Smirnoff Red 1818", price: "$1.50", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Skyy Vodka", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Ciroc", price: "$70.00", btlPrice: "$70.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Absolut Vodka", price: "$3.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Inverroche Amber", price: "$4.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Inverroche Classic", price: "$4.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Beefeater Gin", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Beefeater Strawberry", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Bombay Sapphire", price: "$3.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Gordons Gin", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Malfy Gin", price: "$3.00", category: "spirits", subcategory: "Spirits & Rums" },
-            { name: "Tanqueray Gin", price: "$2.00", category: "spirits", subcategory: "Spirits & Rums" },
-
-            { name: "Hennessy VS", price: "$3.00", shotPrice: "$3.00", btlPrice: "$120.00", category: "spirits", subcategory: "Cognacs" },
-            { name: "Hennessy VSOP", price: "$120.00", btlPrice: "$120.00", category: "spirits", subcategory: "Cognacs" },
-            { name: "Remy Martin VSOP", price: "$120.00", btlPrice: "$120.00", category: "spirits", subcategory: "Cognacs" },
-            { name: "Remy Martin XO", price: "$300.00", btlPrice: "$300.00", category: "spirits", subcategory: "Cognacs" },
-
-            { name: "Don Julio Tequila", price: "$3.00", shotPrice: "$3.00", category: "spirits", subcategory: "Tequila" },
+            // Tequila
+            { name: "Don Julio", price: "$5.00", shotPrice: "$5.00", btlPrice: "$140.00", category: "spirits", subcategory: "Tequila" },
             { name: "Olmeca Black", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Tequila" },
             { name: "Olmeca Silver", price: "$2.00", shotPrice: "$2.00", category: "spirits", subcategory: "Tequila" },
 
-            // --- BEERS & COOLERS ---
-            { name: "Amstel", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Amstel Lite", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Black Label", price: "$2.00", category: "beers", subcategory: "Beers" },
-            { name: "Budweiser", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Castle Lager", price: "$2.00", category: "beers", subcategory: "Beers" },
-            { name: "Castle Lite", price: "$2.50", category: "beers", subcategory: "Beers" },
-            { name: "Golden Pilsener", price: "$2.00", category: "beers", subcategory: "Beers" },
-            { name: "Heineken", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Millers Draft", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Stella Artois", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Windhoek Draught", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Windhoek Lager", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Zambezi", price: "$2.00", category: "beers", subcategory: "Beers" },
-            { name: "Corona", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Flying Fish Lemon", price: "$3.00", category: "beers", subcategory: "Beers" },
-            { name: "Zambezi Draught", price: "$2.50", category: "beers", subcategory: "Beers" },
-            { name: "CBL Draught", price: "$2.50", category: "beers", subcategory: "Beers" },
+            // Cognac
+            { name: "Hennessy VS", price: "$3.00", shotPrice: "$3.00", btlPrice: "$90.00", category: "spirits", subcategory: "Cognac" },
+            { name: "Hennessy VSOP", price: "$140.00", btlPrice: "$140.00", category: "spirits", subcategory: "Cognac" },
+            { name: "Remy Martin VSOP", price: "$120.00", btlPrice: "$120.00", category: "spirits", subcategory: "Cognac" },
+            { name: "Remy Martin XO", price: "$300.00", btlPrice: "$300.00", category: "spirits", subcategory: "Cognac" },
 
-            { name: "Bernini Classic", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
-            { name: "Belgravia Dry Lemon", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
-            { name: "Hunters Extreme", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
-            { name: "Hunters Dry", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
-            { name: "Hunters Gold", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
-            { name: "Brutal Fruit Apple", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
-            { name: "Savanna Dry", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
-            { name: "Smirnoff Spin", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
-            { name: "Smirnoff Storm", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
-            { name: "Smirnoff Guarana", price: "$3.00", category: "beers", subcategory: "Ciders & Spirit Coolers" },
+            // ================= 07. WINE =================
+            // Red Wine
+            { name: "Nederburg Merlot", price: "$15.00", category: "wine", subcategory: "Red Wine" },
+            { name: "Nederburg Shiraz", price: "$15.00", category: "wine", subcategory: "Red Wine" },
+            { name: "Porcupine Ridge Merlot", price: "$14.00", category: "wine", subcategory: "Red Wine" },
+            { name: "Robertson Merlot", price: "$12.00", category: "wine", subcategory: "Red Wine" },
+            { name: "Robertson Pinotage", price: "$12.00", category: "wine", subcategory: "Red Wine" },
+            { name: "R & R Classique", price: "$35.00", category: "wine", subcategory: "Red Wine" },
+            { name: "Nederburg Barone", price: "$14.00", category: "wine", subcategory: "Red Wine" },
+            { name: "Baronne Red", price: "Price TBC", category: "wine", subcategory: "Red Wine" },
+            { name: "Fat Bastard Merlot", price: "Price TBC", category: "wine", subcategory: "Red Wine" },
 
-            // --- WINES & CHAMPAGNE ---
-            { name: "Nederburg Merlot", price: "$15.00", category: "wines", subcategory: "Red Wine" },
-            { name: "Nederburg Shiraz", price: "$15.00", category: "wines", subcategory: "Red Wine" },
-            { name: "Porcupine Ridge Merlot", price: "$14.00", category: "wines", subcategory: "Red Wine" },
-            { name: "Robertson Merlot", price: "$12.00", category: "wines", subcategory: "Red Wine" },
-            { name: "Robertson Pinotage", price: "$12.00", category: "wines", subcategory: "Red Wine" },
-            { name: "R & R Classique", price: "$35.00", category: "wines", subcategory: "Red Wine" },
-            { name: "Nederburg Barone", price: "$14.00", category: "wines", subcategory: "Red Wine" },
+            // White Wine
+            { name: "Nederburg Sauvignon Blanc", price: "$14.00", category: "wine", subcategory: "White Wine" },
+            { name: "Nederburg Lyric", price: "$14.00", category: "wine", subcategory: "White Wine" },
+            { name: "Porcupine Ridge Sauvignon Blanc", price: "$14.00", category: "wine", subcategory: "White Wine" },
+            { name: "Nederburg Cab Sav", price: "Price TBC", category: "wine", subcategory: "White Wine" },
+            { name: "Phoenix Chenin Blanc", price: "Price TBC", category: "wine", subcategory: "White Wine" },
 
-            { name: "Nederburg Sauv Blanc", price: "$14.00", category: "wines", subcategory: "White Wine" },
-            { name: "Nederburg Lyric", price: "$14.00", category: "wines", subcategory: "White Wine" },
-            { name: "Porcupine Ridge SV Blanc", price: "$14.00", category: "wines", subcategory: "White Wine" },
+            // Rosé
+            { name: "Nederburg Rosé", price: "$14.00", category: "wine", subcategory: "Rosé" },
+            { name: "Robertson Rosé", price: "$14.00", category: "wine", subcategory: "Rosé" },
+            { name: "4th Street Rosé / Sweet Red", price: "Price TBC", category: "wine", subcategory: "Rosé" },
 
-            { name: "Nederburg Rose", price: "$14.00", category: "wines", subcategory: "Rose Wine" },
-            { name: "Robertson Rose", price: "$14.00", category: "wines", subcategory: "Rose Wine" },
+            // Syrah
+            { name: "Porcupine Ridge Syrah", price: "Price TBC", category: "wine", subcategory: "Syrah" },
 
-            { name: "Belaire Bleu", price: "$85.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "Belaire Rare Rose", price: "$150.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "Belaire Rose", price: "$85.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "Moët Nectar Imperial", price: "$120.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "Moët Ice Imperial", price: "$120.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "Moët Nectar Imperial Rose", price: "$120.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "Veuve Rich", price: "$150.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "Veuve Brut", price: "$120.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "J C Le Roux Le Flaurette", price: "$12.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "J C Le Roux La Chanson", price: "$12.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
-            { name: "J C Le Roux Le Domaine", price: "$12.00", category: "wines", subcategory: "Champagnes & Sparkling Wines" },
+            // Pinotage
+            { name: "Nederburg Pinotage", price: "Price TBC", category: "wine", subcategory: "Pinotage" },
+            { name: "Van Loveren Pinotage", price: "Price TBC", category: "wine", subcategory: "Pinotage" },
+            { name: "Fat Bastard Pinotage", price: "Price TBC", category: "wine", subcategory: "Pinotage" },
 
-            // --- SOFT DRINKS & JUICES ---
-            { name: "Redbull", price: "$3.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "B52", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Dry Lemon", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Ginger Ale", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Soda Water", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Tonic Water", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Lemonade", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Coke", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Cherry Plum", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Stoney Ginger Beer", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Fanta Orange", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Still Water", price: "$1.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Appletizer", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Cream Soda", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Sparkling Water", price: "$1.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Roses Passion Fusion", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Roses Lime Fusion", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Pine Nut", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
-            { name: "Go Energy", price: "$2.00", category: "beverages", subcategory: "Soft Drinks" },
+            // ================= 08. CHAMPAGNE & SPARKLING =================
+            { name: "Belaire Bleu", price: "$85.00", category: "champagne", subcategory: "Champagne & Sparkling" },
+            { name: "Belaire Rosé", price: "$85.00", category: "champagne", subcategory: "Champagne & Sparkling" },
+            { name: "Belaire Rare Rosé", price: "$150.00", category: "champagne", subcategory: "Champagne & Sparkling" },
+            { name: "Veuve Rich", price: "$150.00", category: "champagne", subcategory: "Champagne & Sparkling" },
+            { name: "Veuve Brut", price: "$120.00", category: "champagne", subcategory: "Champagne & Sparkling" },
+            { name: "JC Le Roux Le Fleurette", price: "$12.00", category: "champagne", subcategory: "Champagne & Sparkling" },
+            { name: "JC Le Roux Le Domaine", price: "$12.00", category: "champagne", subcategory: "Champagne & Sparkling" },
+            { name: "JC Le Roux La Chanson", price: "$12.00", category: "champagne", subcategory: "Champagne & Sparkling" },
 
-            { name: "Liquifruit Apple", price: "$2.00", category: "beverages", subcategory: "Juices" },
-            { name: "Liquifruit Cranberry", price: "$2.00", category: "beverages", subcategory: "Juices" },
-            { name: "Mango & Orange", price: "$2.00", category: "beverages", subcategory: "Juices" },
-            { name: "Passion Power", price: "$2.00", category: "beverages", subcategory: "Juices" }
+            // ================= 09. SOFT DRINKS =================
+            { name: "Coke", price: "$2.00", category: "soft-drinks", subcategory: "Soft Drinks" },
+            { name: "Fanta Orange", price: "$2.00", category: "soft-drinks", subcategory: "Soft Drinks" },
+            { name: "Fanta Grape", price: "Price TBC", category: "soft-drinks", subcategory: "Soft Drinks" },
+            { name: "Cream Soda", price: "$2.00", category: "soft-drinks", subcategory: "Soft Drinks" },
+            { name: "Cherry Plum", price: "$2.00", category: "soft-drinks", subcategory: "Soft Drinks" },
+            { name: "Stoney Ginger Beer", price: "$2.00", category: "soft-drinks", subcategory: "Soft Drinks" },
+            { name: "Sprite", price: "Price TBC", category: "soft-drinks", subcategory: "Soft Drinks" },
+            { name: "Appletizer", price: "$2.00", category: "soft-drinks", subcategory: "Soft Drinks" },
+
+            // ================= 10. JUICES =================
+            // Packaged Juices
+            { name: "LiquiFruit Apple", price: "$2.00", category: "juices", subcategory: "Packaged Juices" },
+            { name: "LiquiFruit Cranberry", price: "$2.00", category: "juices", subcategory: "Packaged Juices" },
+            { name: "Mango & Orange", price: "$2.00", category: "juices", subcategory: "Packaged Juices" },
+            { name: "Passion Power", price: "$2.00", category: "juices", subcategory: "Packaged Juices" },
+            { name: "Pine Nut", price: "$2.00", category: "juices", subcategory: "Packaged Juices" },
+            { name: "Roses Passion Fusion", price: "$2.00", category: "juices", subcategory: "Packaged Juices" },
+            { name: "Roses Lime Fusion", price: "$2.00", category: "juices", subcategory: "Packaged Juices" },
+
+            // Fresh / Service Juices
+            { name: "Cranberry Juice", price: "Price TBC", category: "juices", subcategory: "Fresh / Service Juices" },
+            { name: "Orange Juice", price: "Price TBC", category: "juices", subcategory: "Fresh / Service Juices" },
+            { name: "Pineapple Juice", price: "Price TBC", category: "juices", subcategory: "Fresh / Service Juices" },
+            { name: "Apple Juice", price: "Price TBC", category: "juices", subcategory: "Fresh / Service Juices" },
+
+            // ================= 11. MIXERS =================
+            { name: "Lemonade", price: "$2.00", category: "mixers", subcategory: "Mixers" },
+            { name: "Soda Water", price: "$2.00", category: "mixers", subcategory: "Mixers" },
+            { name: "Tonic Water", price: "$2.00", category: "mixers", subcategory: "Mixers" },
+            { name: "Ginger Ale", price: "$2.00", category: "mixers", subcategory: "Mixers" },
+            { name: "Dry Lemon", price: "$2.00", category: "mixers", subcategory: "Mixers" },
+            { name: "Pink Tonic", price: "Price TBC", category: "mixers", subcategory: "Mixers" },
+
+            // ================= 12. ENERGY DRINKS =================
+            { name: "Red Bull", price: "$3.00", category: "energy", subcategory: "Energy Drinks" },
+
+            // ================= 13. WATER =================
+            { name: "Still Water", price: "$1.00", category: "water", subcategory: "Water" },
+            { name: "Sparkling Water", price: "$1.00", category: "water", subcategory: "Water" }
         ];
 
         let activeCategory = 'all';
+        let activeSubcategory = 'all';
         let searchQuery = '';
 
         // Cart State Management
@@ -1344,6 +1498,11 @@
         function escapeJs(str) {
             if (!str) return '';
             return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        }
+
+        function formatPrice(str) {
+            if (!str) return '';
+            return str.replace(/\.00$/, '');
         }
 
         function parsePrice(priceStr) {
@@ -1565,18 +1724,78 @@
         const searchInput = document.getElementById('search-input');
         const tabBtns = document.querySelectorAll('.tab-btn');
 
+        function getCategoryDisplayName(cat) {
+            switch(cat) {
+                case 'cocktails': return 'Cocktails';
+                case 'mocktails': return 'Mocktails';
+                case 'shooters': return 'Shooters';
+                case 'beers': return 'Beers';
+                case 'ciders': return 'Ciders & Coolers';
+                case 'spirits': return 'Spirits';
+                case 'wine': return 'Wine';
+                case 'champagne': return 'Champagne & Sparkling';
+                case 'soft-drinks': return 'Soft Drinks';
+                case 'juices': return 'Juices';
+                case 'mixers': return 'Mixers';
+                case 'energy': return 'Energy Drinks';
+                case 'water': return 'Water';
+                default: return '';
+            }
+        }
+
+        function renderSubcategoryPills() {
+            const wrapper = document.getElementById('subcat-pills-wrapper');
+            if (!wrapper) return;
+
+            if (activeCategory === 'all') {
+                wrapper.innerHTML = '';
+                wrapper.classList.add('hidden');
+                return;
+            }
+
+            const subcats = Array.from(new Set(
+                drinksData
+                    .filter(item => item.category === activeCategory)
+                    .map(item => item.subcategory)
+            ));
+
+            if (subcats.length <= 1) {
+                wrapper.innerHTML = '';
+                wrapper.classList.add('hidden');
+                return;
+            }
+
+            let pillsHtml = `<button class="subcat-pill-btn ${activeSubcategory === 'all' ? 'active' : ''}" data-subcat="all">All ${getCategoryDisplayName(activeCategory)}</button>`;
+
+            subcats.forEach(sc => {
+                pillsHtml += `<button class="subcat-pill-btn ${activeSubcategory === sc ? 'active' : ''}" data-subcat="${escapeJs(sc)}">${sc}</button>`;
+            });
+
+            wrapper.innerHTML = pillsHtml;
+            wrapper.classList.remove('hidden');
+
+            wrapper.querySelectorAll('.subcat-pill-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    activeSubcategory = btn.getAttribute('data-subcat');
+                    renderSubcategoryPills();
+                    renderMenu();
+                });
+            });
+        }
+
         function renderMenu() {
             renderTarget.innerHTML = '';
 
-            // Filter items based on activeCategory and searchQuery
+            // Filter items based on activeCategory, activeSubcategory, and searchQuery
             const filtered = drinksData.filter(item => {
                 const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+                const matchesSubcat = activeSubcategory === 'all' || item.subcategory === activeSubcategory;
                 const matchesSearch = !searchQuery || 
                     item.name.toLowerCase().includes(searchQuery) ||
                     (item.desc && item.desc.toLowerCase().includes(searchQuery)) ||
                     item.subcategory.toLowerCase().includes(searchQuery) ||
                     (item.price && item.price.toLowerCase().includes(searchQuery));
-                return matchesCategory && matchesSearch;
+                return matchesCategory && matchesSubcat && matchesSearch;
             });
 
             if (filtered.length === 0) {
@@ -1610,30 +1829,32 @@
                     if (drink.shotPrice && drink.btlPrice) {
                         priceHtml = `
                             <div class="drink-price-group">
-                                <span class="price-badge">${drink.shotPrice}</span>
-                                <span class="price-sub">Shot</span>
-                                <span class="price-badge" style="margin-top: 3px;">${drink.btlPrice}</span>
-                                <span class="price-sub">Bottle</span>
+                                <div class="price-line"><span class="price-label">Shot —</span> <span class="price-val">${formatPrice(drink.shotPrice)}</span></div>
+                                <div class="price-line"><span class="price-label">Full Bottle —</span> <span class="price-val">${formatPrice(drink.btlPrice)}</span></div>
                             </div>
                         `;
                     } else if (drink.btlPrice) {
                         priceHtml = `
                             <div class="drink-price-group">
-                                <span class="price-badge">${drink.btlPrice}</span>
-                                <span class="price-sub">Bottle</span>
+                                <div class="price-line"><span class="price-label">Full Bottle —</span> <span class="price-val">${formatPrice(drink.btlPrice)}</span></div>
                             </div>
                         `;
                     } else if (drink.shotPrice) {
                         priceHtml = `
                             <div class="drink-price-group">
-                                <span class="price-badge">${drink.shotPrice}</span>
-                                <span class="price-sub">Shot</span>
+                                <div class="price-line"><span class="price-label">Shot —</span> <span class="price-val">${formatPrice(drink.shotPrice)}</span></div>
+                            </div>
+                        `;
+                    } else if (drink.price === 'Price TBC') {
+                        priceHtml = `
+                            <div class="drink-price-group">
+                                <span class="price-badge price-tbc">Price TBC</span>
                             </div>
                         `;
                     } else {
                         priceHtml = `
                             <div class="drink-price-group">
-                                <span class="price-badge">${drink.price}</span>
+                                <span class="price-badge">${formatPrice(drink.price)}</span>
                             </div>
                         `;
                     }
@@ -1653,7 +1874,7 @@
                                 <button class="qty-btn" onclick="updateQuantityById('${escapeJs(shotId)}', 1)">+</button>
                             </div>
                         ` : `
-                            <button class="add-option-btn" onclick="addDrinkByIndex(${originalIdx}, 'Shot', '${drink.shotPrice}')">+ Shot (${drink.shotPrice})</button>
+                            <button class="add-option-btn" onclick="addDrinkByIndex(${originalIdx}, 'Shot', '${drink.shotPrice}')">+ Shot (${formatPrice(drink.shotPrice)})</button>
                         `;
 
                         const btlCtrl = btlQty > 0 ? `
@@ -1663,7 +1884,7 @@
                                 <button class="qty-btn" onclick="updateQuantityById('${escapeJs(btlId)}', 1)">+</button>
                             </div>
                         ` : `
-                            <button class="add-option-btn" onclick="addDrinkByIndex(${originalIdx}, 'Bottle', '${drink.btlPrice}')">+ Bottle (${drink.btlPrice})</button>
+                            <button class="add-option-btn" onclick="addDrinkByIndex(${originalIdx}, 'Bottle', '${drink.btlPrice}')">+ Bottle (${formatPrice(drink.btlPrice)})</button>
                         `;
 
                         actionsHtml = `
@@ -1692,7 +1913,7 @@
                             actionsHtml = `
                                 <div class="drink-actions">
                                     <button class="add-btn-single" onclick="addDrinkByIndex(${originalIdx}, 'Bottle', '${drink.btlPrice}')">
-                                        <span>+</span> Add Bottle (${drink.btlPrice})
+                                        <span>+</span> Add Full Bottle (${formatPrice(drink.btlPrice)})
                                     </button>
                                 </div>
                             `;
@@ -1715,7 +1936,7 @@
                             actionsHtml = `
                                 <div class="drink-actions">
                                     <button class="add-btn-single" onclick="addDrinkByIndex(${originalIdx}, 'Shot', '${drink.shotPrice}')">
-                                        <span>+</span> Add Shot (${drink.shotPrice})
+                                        <span>+</span> Add Shot (${formatPrice(drink.shotPrice)})
                                     </button>
                                 </div>
                             `;
@@ -1760,83 +1981,74 @@
 
                 let bannerHtml = '';
                 if (!searchQuery) {
-                    if (subcatName === 'Signature Cocktails') {
+                    const sc = subcatName.toLowerCase();
+                    if (sc.includes('signature') || sc.includes('cocktail') || sc.includes('classic') || sc.includes('speciality') || sc.includes('dessert')) {
                         bannerHtml = `
                             <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/ed6cb7fe8ed69395a35a6f99e0f022b4.jpg" alt="Cocktails Feature" />
-                                <div class="editorial-banner-overlay">
-                                    <span class="editorial-tag">SELECTION</span>
-                                    <h3 class="editorial-title">COCKTAILS — Signature Pours</h3>
-                                </div>
-                            </div>
-                        `;
-                    } else if (subcatName === 'Classics' || subcatName === 'Classic Cocktails' || subcatName === 'Specialities' || subcatName === 'Dessert Cocktails') {
-                        bannerHtml = `
-                            <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/d865c3416ecdb51798199ff2a61dfe6a.jpg" alt="Signature Drinks" />
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/ed6cb7fe8ed69395a35a6f99e0f022b4.jpg" alt="Cocktails" />
                                 <div class="editorial-banner-overlay">
                                     <span class="editorial-tag">CRAFT MIXOLOGY</span>
-                                    <h3 class="editorial-title">Handcrafted Pours & Classics</h3>
+                                    <h3 class="editorial-title">${subcatName}</h3>
                                 </div>
                             </div>
                         `;
-                    } else if (subcatName === 'Mocktails') {
+                    } else if (sc.includes('mocktail')) {
                         bannerHtml = `
                             <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Mocktails.jpg" alt="Mocktails & Refreshers" />
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Mocktails.jpg" alt="Mocktails" />
                                 <div class="editorial-banner-overlay">
                                     <span class="editorial-tag">ZERO PROOF</span>
-                                    <h3 class="editorial-title">Mocktails & Artisanal Refreshers</h3>
+                                    <h3 class="editorial-title">Mocktails & Refreshers</h3>
                                 </div>
                             </div>
                         `;
-                    } else if (subcatName === 'Whiskey') {
+                    } else if (sc.includes('whiskey')) {
                         bannerHtml = `
                             <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/28c86921ced7dffd814b8e99c725488b.jpg" alt="Whiskey & Reserve" />
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/28c86921ced7dffd814b8e99c725488b.jpg" alt="Whiskey" />
                                 <div class="editorial-banner-overlay">
-                                    <span class="editorial-tag">ATMOSPHERE</span>
-                                    <h3 class="editorial-title">Whiskey, Spirits & Fine Liquors</h3>
+                                    <span class="editorial-tag">FINE RESERVE</span>
+                                    <h3 class="editorial-title">Whiskey & Reserve Liquors</h3>
                                 </div>
                             </div>
                         `;
-                    } else if (subcatName === 'Spirits & Rums' || subcatName === 'Cognacs' || subcatName === 'Tequila') {
+                    } else if (sc.includes('vodka') || sc.includes('gin') || sc.includes('rum') || sc.includes('tequila') || sc.includes('cognac') || sc.includes('spirit')) {
                         bannerHtml = `
                             <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Vdka.jpg" alt="Vodka & Fine Spirits" />
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Vdka.jpg" alt="Spirits" />
                                 <div class="editorial-banner-overlay">
-                                    <span class="editorial-tag">PREMIUM LIQUORS</span>
-                                    <h3 class="editorial-title">Vodka, Gin, Rums & Cognacs</h3>
+                                    <span class="editorial-tag">PREMIUM SPIRITS</span>
+                                    <h3 class="editorial-title">${subcatName}</h3>
                                 </div>
                             </div>
                         `;
-                    } else if (subcatName === 'Champagnes & Sparkling Wines' || subcatName === 'Red Wine' || subcatName === 'White Wine' || subcatName === 'Rose Wine') {
+                    } else if (sc.includes('wine') || sc.includes('rosé') || sc.includes('syrah') || sc.includes('pinotage') || sc.includes('champagne') || sc.includes('sparkling')) {
                         bannerHtml = `
                             <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Champagne.jpg" alt="Champagne & Fine Wines" />
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Champagne.jpg" alt="Wines & Champagne" />
                                 <div class="editorial-banner-overlay">
                                     <span class="editorial-tag">CELEBRATION</span>
-                                    <h3 class="editorial-title">Champagnes, Sparkling & Reserve Wines</h3>
+                                    <h3 class="editorial-title">${subcatName}</h3>
                                 </div>
                             </div>
                         `;
-                    } else if (subcatName === 'Soft Drinks') {
+                    } else if (sc.includes('soft') || sc.includes('juice') || sc.includes('mixer') || sc.includes('energy') || sc.includes('water')) {
                         bannerHtml = `
                             <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Soft%20drinks.jpg" alt="Soft Drinks & Mixers" />
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/Soft%20drinks.jpg" alt="Beverages" />
                                 <div class="editorial-banner-overlay">
                                     <span class="editorial-tag">BEVERAGES</span>
-                                    <h3 class="editorial-title">Soft Drinks, Juices & Energy</h3>
+                                    <h3 class="editorial-title">${subcatName}</h3>
                                 </div>
                             </div>
                         `;
-                    } else if (subcatName === 'Party Shots' || subcatName === 'Aphrodisiacs' || subcatName === 'Pyro' || subcatName === 'Beers' || subcatName === 'Ciders & Spirit Coolers') {
+                    } else {
                         bannerHtml = `
                             <div class="editorial-banner-card">
-                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/05b40712578eccd594e796ea0096306f.jpg" alt="Bar Craft & Shooters" />
+                                <img src="https://pub-e10a28ca38cf452da437555e0f90e288.r2.dev/saints%26sinners/Bar%20Menu/05b40712578eccd594e796ea0096306f.jpg" alt="From the Bar" />
                                 <div class="editorial-banner-overlay">
                                     <span class="editorial-tag">FROM THE BAR</span>
-                                    <h3 class="editorial-title">Shooters, Chilled Beers & Craft Coolers</h3>
+                                    <h3 class="editorial-title">${subcatName}</h3>
                                 </div>
                             </div>
                         `;
@@ -1854,6 +2066,8 @@
                 tabBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 activeCategory = btn.getAttribute('data-category');
+                activeSubcategory = 'all';
+                renderSubcategoryPills();
                 renderMenu();
             });
         });
@@ -1865,6 +2079,7 @@
         });
 
         // Initial Render
+        renderSubcategoryPills();
         renderMenu();
 
         // Ambient Particle Canvas
