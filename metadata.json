@@ -2,5 +2,5 @@
   "name": "Saints n’ Sinners",
   "description": "A premium cinematic mobile landing experience for an exclusive nightlife ecosystem.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

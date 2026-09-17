@@ -21,13 +21,12 @@ const managementModule = {
             function animate() {
                 angle += 0.004;
                 
-                // Cinematic slow drift
-                const x = Math.sin(angle) * 1.5;
-                const y = Math.cos(angle * 0.8) * 1.0;
-                const scale = 1.05 + Math.sin(angle * 0.5) * 0.02;
+                // Cinematic slow drift without artificial scaling/zoom
+                const x = Math.sin(angle) * 2;
+                const y = Math.cos(angle * 0.8) * 1.5;
                 
                 if (img) {
-                    img.style.transform = `translate(${x}%, ${y}%) scale(${scale})`;
+                    img.style.transform = `translate3d(${x}px, ${y}px, 0)`;
                 }
 
                 // Light sweep motion
